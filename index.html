@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Security Protocol - Advanced Authentication Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Importação de Fontes */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+        /* Reset e Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Container Principal de Login */
+        .login-container {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Fundo Tecnológico */
+        .login-background {
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            width: 100%;
+            height: 100%;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Partículas Flutuantes */
+        .particles-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .particle-2 { top: 60%; left: 20%; animation-delay: 1s; }
+        .particle-3 { top: 40%; left: 80%; animation-delay: 2s; }
+        .particle-4 { top: 80%; left: 70%; animation-delay: 3s; }
+        .particle-5 { top: 30%; left: 50%; animation-delay: 4s; }
+        .particle-6 { top: 70%; left: 30%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Sistema de Engrenagens */
+        .gears-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .gear {
+            position: absolute;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, 
+                rgba(138, 43, 226, 0.1) 0deg,
+                rgba(138, 43, 226, 0.3) 45deg,
+                rgba(138, 43, 226, 0.1) 90deg,
+                rgba(138, 43, 226, 0.3) 135deg,
+                rgba(138, 43, 226, 0.1) 180deg,
+                rgba(138, 43, 226, 0.3) 225deg,
+                rgba(138, 43, 226, 0.1) 270deg,
+                rgba(138, 43, 226, 0.3) 315deg,
+                rgba(138, 43, 226, 0.1) 360deg
+            );
+            border: 2px solid rgba(138, 43, 226, 0.2);
+            transition: all 0.5s ease;
+        }
+
+        .gear::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .gear.idle {
+            animation: gearRotateIdle 20s linear infinite;
+        }
+
+        .gear.active {
+            animation: gearRotateActive 2s linear infinite;
+            border-color: rgba(138, 43, 226, 0.8);
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+        }
+
+        .gear-1 { width: 120px; height: 120px; top: 15%; left: 10%; }
+        .gear-2 { width: 80px; height: 80px; top: 25%; right: 15%; }
+        .gear-3 { width: 100px; height: 100px; bottom: 20%; left: 20%; }
+        .gear-4 { width: 60px; height: 60px; bottom: 30%; right: 25%; }
+        .gear-5 { width: 90px; height: 90px; top: 50%; left: 5%; }
+        .gear-6 { width: 70px; height: 70px; top: 60%; right: 10%; }
+
+        @keyframes gearRotateIdle {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes gearRotateActive {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Container do Painel de Login */
+        .tech-login-container {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(138, 43, 226, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header Tecnológico */
+        .tech-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        .status-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: #22c55e;
+            letter-spacing: 1px;
+        }
+
+        .system-time {
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            color: #8a2be2;
+            font-weight: 500;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Logo e Identificação */
+        .tech-logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .logo-hexagon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #8a2be2, #4a148c);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .hexagon-inner {
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 0, 0, 0.3);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hexagon-glow {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(135deg, #8a2be2, #4a148c);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            filter: blur(10px);
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        .system-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+
+        .system-subtitle {
+            font-size: 14px;
+            color: #8a2be2;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* Formulário Tecnológico */
+        .tech-form {
+            space-y: 6;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #8a2be2;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .tech-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tech-input:focus {
+            outline: none;
+            border-color: #8a2be2;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .tech-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Contador de Tentativas */
+        .attempt-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+
+        .counter-label {
+            font-size: 12px;
+            color: #8a2be2;
+            font-weight: 600;
+        }
+
+        .counter-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .counter-bars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .bar {
+            width: 20px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .bar.active {
+            background: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        /* Mensagens do Sistema */
+        .tech-message {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+
+        @keyframes messageSlide {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Botão Tecnológico */
+        .tech-button {
+            width: 100%;
+            position: relative;
+            background: linear-gradient(135deg, #8a2be2, #4a148c);
+            border: none;
+            border-radius: 12px;
+            padding: 18px 24px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .tech-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+        }
+
+        .tech-button:active {
+            transform: translateY(0);
+        }
+
+        .button-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tech-button:hover .button-glow {
+            left: 100%;
+        }
+
+        .button-scan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .tech-button:hover .button-scan {
+            transform: translateX(100%);
+        }
+
+        /* Estados do Botão */
+        .tech-button.loading {
+            background: linear-gradient(135deg, #6b7280, #374151);
+            cursor: not-allowed;
+        }
+
+        .tech-button.loading .button-text::after {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Overlay de Ativação Robótica */
+        .robot-activation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .robot-activation-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .gears-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        /* Engrenagens do Sistema Robótico */
+        .gear-robot {
+            position: absolute;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, 
+                rgba(138, 43, 226, 0.2) 0deg,
+                rgba(138, 43, 226, 0.8) 45deg,
+                rgba(138, 43, 226, 0.2) 90deg,
+                rgba(138, 43, 226, 0.8) 135deg,
+                rgba(138, 43, 226, 0.2) 180deg,
+                rgba(138, 43, 226, 0.8) 225deg,
+                rgba(138, 43, 226, 0.2) 270deg,
+                rgba(138, 43, 226, 0.8) 315deg,
+                rgba(138, 43, 226, 0.2) 360deg
+            );
+            border: 3px solid rgba(138, 43, 226, 0.6);
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.4);
+        }
+
+        .gear-robot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            height: 50%;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(138, 43, 226, 0.4);
+        }
+
+        /* Engrenagem Principal */
+        .gear-main {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: gearRotateMain 3s ease-in-out;
+        }
+
+        /* Engrenagens Secundárias */
+        .gear-secondary-1 {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 20%;
+            animation: gearRotateSecondary1 3.5s ease-in-out;
+        }
+
+        .gear-secondary-2 {
+            width: 80px;
+            height: 80px;
+            top: 25%;
+            right: 25%;
+            animation: gearRotateSecondary2 3.2s ease-in-out;
+        }
+
+        .gear-secondary-3 {
+            width: 90px;
+            height: 90px;
+            bottom: 30%;
+            left: 25%;
+            animation: gearRotateSecondary3 3.8s ease-in-out;
+        }
+
+        .gear-secondary-4 {
+            width: 70px;
+            height: 70px;
+            bottom: 25%;
+            right: 30%;
+            animation: gearRotateSecondary4 3.3s ease-in-out;
+        }
+
+        /* Engrenagens Pequenas */
+        .gear-small-1 {
+            width: 40px;
+            height: 40px;
+            top: 10%;
+            left: 50%;
+            animation: gearRotateSmall1 2.8s ease-in-out;
+        }
+
+        .gear-small-2 {
+            width: 35px;
+            height: 35px;
+            top: 50%;
+            right: 10%;
+            animation: gearRotateSmall2 2.5s ease-in-out;
+        }
+
+        .gear-small-3 {
+            width: 45px;
+            height: 45px;
+            bottom: 10%;
+            left: 45%;
+            animation: gearRotateSmall3 3.1s ease-in-out;
+        }
+
+        .gear-small-4 {
+            width: 30px;
+            height: 30px;
+            top: 45%;
+            left: 10%;
+            animation: gearRotateSmall4 2.7s ease-in-out;
+        }
+
+        /* Animações das Engrenagens */
+        @keyframes gearRotateMain {
+            0% { 
+                transform: translate(-50%, -50%) rotate(0deg) scale(0.3);
+                opacity: 0;
+                filter: blur(10px);
+            }
+            25% { 
+                opacity: 0.5;
+                filter: blur(5px);
+            }
+            100% { 
+                transform: translate(-50%, -50%) rotate(720deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes gearRotateSecondary1 {
+            0% { 
+                transform: rotate(0deg) scale(0.2);
+                opacity: 0;
+                filter: blur(8px);
+            }
+            30% { 
+                opacity: 0.6;
+                filter: blur(4px);
+            }
+            100% { 
+                transform: rotate(-480deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes gearRotateSecondary2 {
+            0% { 
+                transform: rotate(0deg) scale(0.2);
+                opacity: 0;
+                filter: blur(8px);
+            }
+            30% { 
+                opacity: 0.6;
+                filter: blur(4px);
+            }
+            100% { 
+                transform: rotate(600deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes gearRotateSecondary3 {
+            0% { 
+                transform: rotate(0deg) scale(0.2);
+                opacity: 0;
+                filter: blur(8px);
+            }
+            30% { 
+                opacity: 0.6;
+                filter: blur(4px);
+            }
+            100% { 
+                transform: rotate(-540deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes gearRotateSecondary4 {
+            0% { 
+                transform: rotate(0deg) scale(0.2);
+                opacity: 0;
+                filter: blur(8px);
+            }
+            30% { 
+                opacity: 0.6;
+                filter: blur(4px);
+            }
+            100% { 
+                transform: rotate(520deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+        
+        @keyframes gearRotateSmall1 {
+            0% { 
+                transform: rotate(0deg) scale(0.1);
+                opacity: 0;
+                filter: blur(6px);
+            }
+            40% { 
+                opacity: 0.7;
+                filter: blur(3px);
+            }
+            100% { 
+                transform: rotate(-360deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+        
+        @keyframes gearRotateSmall2 {
+            0% { 
+                transform: rotate(0deg) scale(0.1);
+                opacity: 0;
+                filter: blur(6px);
+            }
+            40% { 
+                opacity: 0.7;
+                filter: blur(3px);
+            }
+            100% { 
+                transform: rotate(420deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+        
+        @keyframes gearRotateSmall3 {
+            0% { 
+                transform: rotate(0deg) scale(0.1);
+                opacity: 0;
+                filter: blur(6px);
+            }
+            40% { 
+                opacity: 0.7;
+                filter: blur(3px);
+            }
+            100% { 
+                transform: rotate(-450deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+        
+        @keyframes gearRotateSmall4 {
+            0% { 
+                transform: rotate(0deg) scale(0.1);
+                opacity: 0;
+                filter: blur(6px);
+            }
+            40% { 
+                opacity: 0.7;
+                filter: blur(3px);
+            }
+            100% { 
+                transform: rotate(380deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+        
+        /* Texto de Ativação Robótica */
+        .robot-activation-text {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #8a2be2;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-align: center;
+            opacity: 0;
+            animation: robotTextActivation 4s ease-in-out;
+        }
+        
+        @keyframes robotTextActivation {
+            0% { 
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+                filter: blur(5px);
+            }
+            20% { 
+                opacity: 0.3;
+                filter: blur(3px);
+            }
+            40% { 
+                opacity: 0.6;
+                filter: blur(1px);
+            }
+            60% { 
+                opacity: 0.8;
+                transform: translateX(-50%) translateY(0px);
+                filter: blur(0px);
+            }
+            80% { 
+                opacity: 1;
+            }
+            100% { 
+                opacity: 0;
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* Informações do Sistema */
+        .system-info {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 11px;
+            color: #ffffff;
+        }
+        
+        /* Luzes de Segurança */
+        .security-lights {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+        
+        .security-light {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .security-light.active {
+            background: #ff0000;
+            box-shadow: 0 0 15px #ff0000;
+            animation: securityBlink 0.5s ease-in-out;
+        }
+
+        @keyframes securityBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Estilos para Sites Online */
+        .site-card {
+            position: relative;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .site-card.online {
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+        }
+
+        .site-card.offline {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+
+        .site-card.checking {
+            border-color: rgba(251, 191, 36, 0.5);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .status-dot.online {
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        .status-dot.checking {
+            background: #fbbf24;
+            box-shadow: 0 0 10px #fbbf24;
+            animation: pulse 1s infinite;
+        }
+
+        .site-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .site-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .site-btn.visit {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .site-btn.visit:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .site-btn.check {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .site-btn.check:hover {
+            background: rgba(34, 197, 94, 0.3);
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .site-btn.remove {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .site-btn.remove:hover {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .site-url {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #9ca3af;
+            word-break: break-all;
+        }
+
+        .site-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .site-status {
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .site-response-time {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* Animação de carregamento para verificação */
+        .checking-animation {
+            animation: checkingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes checkingPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="login-container overflow-x-hidden">
+
+    <!-- Tela de Login Tecnológica -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden login-background">
+        
+        <!-- Efeitos de Fundo Tecnológicos -->
+        <div class="absolute inset-0">
+            <!-- Grid Tecnológico -->
+            <div class="absolute inset-0 opacity-20">
+                <div class="grid-pattern"></div>
+            </div>
+            
+            <!-- Partículas Flutuantes -->
+            <div class="particles-container">
+                <div class="particle particle-1"></div>
+                <div class="particle particle-2"></div>
+                <div class="particle particle-3"></div>
+                <div class="particle particle-4"></div>
+                <div class="particle particle-5"></div>
+                <div class="particle particle-6"></div>
+            </div>
+        </div>
+        
+        <!-- Sistema de Engrenagens Interativas -->
+        <div class="gears-background">
+            <div class="gear gear-1 idle" id="gear1"></div>
+            <div class="gear gear-2 idle" id="gear2"></div>
+            <div class="gear gear-3 idle" id="gear3"></div>
+            <div class="gear gear-4 idle" id="gear4"></div>
+            <div class="gear gear-5 idle" id="gear5"></div>
+            <div class="gear gear-6 idle" id="gear6"></div>
+        </div>
+        
+        <!-- Painel de Login Principal -->
+        <div class="tech-login-container relative z-10">
+            <!-- Header Tecnológico -->
+            <div class="tech-header">
+                <div class="system-status">
+                    <div class="status-indicator online"></div>
+                    <span class="status-text">SISTEMA ONLINE</span>
+                </div>
+                <div class="system-time" id="loginSystemTime"></div>
+            </div>
+            
+            <!-- Logo e Identificação -->
+            <div class="tech-logo-section">
+                <div class="logo-container">
+                    <div class="logo-hexagon">
+                        <div class="hexagon-inner">
+                            <i class="fas fa-shield-alt text-purple-400 text-4xl"></i>
+                        </div>
+                        <div class="hexagon-glow"></div>
+                    </div>
+                </div>
+                <h1 class="system-title">NEXUS SECURITY PROTOCOL</h1>
+                <p class="system-subtitle">Advanced Authentication Interface</p>
+            </div>
+
+            <!-- Formulário de Autenticação -->
+            <form id="loginForm" class="tech-form">
+                <div class="input-group">
+                    <label class="input-label">
+                        <i class="fas fa-user mr-2"></i>
+                        USUÁRIO
+                    </label>
+                    <div class="input-container">
+                        <input 
+                            type="text" 
+                            id="usernameInput"
+                            class="tech-input"
+                            placeholder="Digite seu nome de usuário..."
+                            value="admin"
+                            readonly
+                        >
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">
+                        <i class="fas fa-key mr-2"></i>
+                        SENHA
+                    </label>
+                    <div class="input-container">
+                        <input 
+                            type="password" 
+                            id="passwordInput"
+                            class="tech-input"
+                            placeholder="Digite sua senha de segurança..."
+                            required
+                            autocomplete="current-password"
+                        >
+                    </div>
+                </div>
+                
+                <!-- Indicador de Tentativas -->
+                <div class="attempt-counter">
+                    <div class="counter-label">Tentativas:</div>
+                    <div class="counter-display">
+                        <span id="attemptCounter">0/3</span>
+                        <div class="counter-bars">
+                            <div class="bar bar-1"></div>
+                            <div class="bar bar-2"></div>
+                            <div class="bar bar-3"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mensagens de Status -->
+                <div id="errorMessage" class="hidden tech-message error-message">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    <span>ACESSO NEGADO - Credenciais inválidas</span>
+                </div>
+                
+                <div id="welcomeMessage" class="hidden tech-message success-message">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>AUTENTICAÇÃO CONFIRMADA - Acesso liberado</span>
+                </div>
+                
+                <!-- Botão de Autenticação -->
+                <button 
+                    type="submit"
+                    id="loginButton"
+                    class="tech-button"
+                >
+                    <div class="button-content">
+                        <i class="fas fa-fingerprint mr-2"></i>
+                        <span class="button-text">ENTRAR</span>
+                    </div>
+                    <div class="button-glow"></div>
+                    <div class="button-scan"></div>
+                </button>
+            </form>
+
+            <!-- Informações do Sistema -->
+            <div class="system-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <i class="fas fa-server text-green-400"></i>
+                        <span>Servidor: Online</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-shield-alt text-blue-400"></i>
+                        <span>Criptografia: AES-256</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-lock text-yellow-400"></i>
+                        <span>Protocolo: SSL/TLS</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-eye text-purple-400"></i>
+                        <span>Monitoramento: Ativo</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Luzes de Segurança -->
+            <div class="security-lights">
+                <div class="security-light light-1"></div>
+                <div class="security-light light-2"></div>
+                <div class="security-light light-3"></div>
+                <div class="security-light light-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de Ativação Robótica -->
+    <div id="robotActivationOverlay" class="robot-activation-overlay">
+        <div class="gears-container">
+            <!-- Engrenagem Principal Central -->
+            <div class="gear-robot gear-main"></div>
+            
+            <!-- Engrenagens Secundárias -->
+            <div class="gear-robot gear-secondary-1"></div>
+            <div class="gear-robot gear-secondary-2"></div>
+            <div class="gear-robot gear-secondary-3"></div>
+            <div class="gear-robot gear-secondary-4"></div>
+            
+            <!-- Engrenagens Pequenas -->
+            <div class="gear-robot gear-small-1"></div>
+            <div class="gear-robot gear-small-2"></div>
+            <div class="gear-robot gear-small-3"></div>
+            <div class="gear-robot gear-small-4"></div>
+            
+            <!-- Texto de Ativação -->
+            <div class="robot-activation-text">
+                SISTEMA NEXUS ATIVANDO...<br>
+                <span style="font-size: 14px; opacity: 0.8;">INICIALIZANDO PROTOCOLOS DE SEGURANÇA</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel Principal -->
+    <div id="adminPanel" class="hidden min-h-screen bg-black">
+        <!-- Header -->
+        <header class="bg-black border-b border-gray-800 shadow-2xl">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-gradient-to-r from-gray-700 to-gray-900 w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-shield-alt text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-white">Centro de Comando ARIA</h1>
+                            <p class="text-gray-400 text-sm">Advanced Administrative Interface</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button 
+                            id="audioToggleBtn"
+                            class="bg-purple-800 hover:bg-purple-700 text-white px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium border border-purple-600 hover:border-purple-500 shadow-lg"
+                            title="Alternar Áudio"
+                        >
+                            <i class="fas fa-volume-up" id="audioIcon"></i>
+                        </button>
+                        <button 
+                            id="databaseBtn"
+                            class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-200 text-sm font-medium border border-gray-600 hover:border-gray-500 shadow-lg"
+                        >
+                            <i class="fas fa-database mr-2"></i>
+                            Banco de Dados
+                        </button>
+                        <button 
+                            id="editBtn"
+                            class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-200 text-sm font-medium border border-gray-600 hover:border-gray-500 shadow-lg"
+                        >
+                            <i class="fas fa-edit mr-2"></i>
+                            Editor
+                        </button>
+                        <button 
+                            id="logoutBtn"
+                            class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-200 font-medium border border-gray-600 hover:border-gray-500 shadow-lg"
+                        >
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            Encerrar Sessão
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Redes Sociais -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center mr-4">
+                        <i class="fas fa-share-alt text-white"></i>
+                    </div>
+                    Redes Sociais
+                    <div class="ml-4 h-px bg-gradient-to-r from-cyan-400 to-transparent flex-1"></div>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Canva -->
+                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-gray-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://www.canva.com', '_blank')">
+                        <div class="relative text-center">
+                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-gray-600 bg-white flex items-center justify-center shadow-lg transition-all duration-500">
+                                <svg viewBox="0 0 100 100" class="w-16 h-16">
+                                    <defs>
+                                        <linearGradient id="canvaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#00c4cc"/>
+                                            <stop offset="50%" style="stop-color:#7b2cbf"/>
+                                            <stop offset="100%" style="stop-color:#06ffa5"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <circle cx="50" cy="50" r="40" fill="url(#canvaGrad)"/>
+                                    <path d="M30 35 Q50 25 70 35 Q50 45 30 35" fill="white" opacity="0.9"/>
+                                    <path d="M35 50 Q50 40 65 50 Q50 60 35 50" fill="white" opacity="0.8"/>
+                                    <path d="M40 65 Q50 55 60 65 Q50 75 40 65" fill="white" opacity="0.7"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-white font-bold text-xl mb-3 transition-colors duration-300">Canva</h3>
+                            <p class="text-gray-400 text-sm mb-4 transition-colors duration-300">Design Gráfico e Criação Visual</p>
+                            <div class="bg-gray-800 text-white px-4 py-2 rounded-xl text-sm border border-gray-600 hover:border-gray-500 transition-all duration-300">
+                                <i class="fas fa-palette mr-2"></i>
+                                Criar Designs
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ferramentas de IA -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-4">
+                        <i class="fas fa-brain text-white"></i>
+                    </div>
+                    Ferramentas de Inteligência Artificial
+                    <div class="ml-4 h-px bg-gradient-to-r from-purple-500 to-transparent flex-1"></div>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- LM Arena -->
+                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-purple-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://lmarena.ai/', '_blank')">
+                        <div class="relative text-center">
+                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-purple-600 bg-gradient-to-br from-purple-900 to-purple-700 flex items-center justify-center shadow-lg">
+                                <i class="fas fa-trophy text-yellow-400 text-3xl"></i>
+                            </div>
+                            <h3 class="text-white font-bold text-xl mb-3">LM Arena</h3>
+                            <p class="text-gray-400 text-sm mb-4">Batalha de Modelos de IA</p>
+                            <div class="bg-purple-800 text-white px-4 py-2 rounded-xl text-sm border border-purple-600 hover:border-purple-500 transition-all duration-300">
+                                <i class="fas fa-battle-net mr-2"></i>
+                                Comparar IAs
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google AI Studio -->
+                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-blue-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://aistudio.google.com/app/prompts/new_chat', '_blank')">
+                        <div class="relative text-center">
+                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-blue-600 bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center shadow-lg">
+                                <i class="fab fa-google text-white text-3xl"></i>
+                            </div>
+                            <h3 class="text-white font-bold text-xl mb-3">Google AI Studio</h3>
+                            <p class="text-gray-400 text-sm mb-4">Gemini e Ferramentas Google</p>
+                            <div class="bg-blue-800 text-white px-4 py-2 rounded-xl text-sm border border-blue-600 hover:border-blue-500 transition-all duration-300">
+                                <i class="fas fa-code mr-2"></i>
+                                Criar Prompts
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ChatGPT -->
+                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-green-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://chatgpt.com/', '_blank')">
+                        <div class="relative text-center">
+                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-green-600 bg-gradient-to-br from-green-900 to-green-700 flex items-center justify-center shadow-lg">
+                                <i class="fas fa-comments text-white text-3xl"></i>
+                            </div>
+                            <h3 class="text-white font-bold text-xl mb-3">ChatGPT</h3>
+                            <p class="text-gray-400 text-sm mb-4">OpenAI GPT-4 e Assistente</p>
+                            <div class="bg-green-800 text-white px-4 py-2 rounded-xl text-sm border border-green-600 hover:border-green-500 transition-all duration-300">
+                                <i class="fas fa-robot mr-2"></i>
+                                Conversar
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Runway ML -->
+                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-pink-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://runwayml.com/', '_blank')">
+                        <div class="relative text-center">
+                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-pink-600 bg-gradient-to-br from-pink-900 to-pink-700 flex items-center justify-center shadow-lg">
+                                <i class="fas fa-video text-white text-3xl"></i>
+                            </div>
+                            <h3 class="text-white font-bold text-xl mb-3">Runway ML</h3>
+                            <p class="text-gray-400 text-sm mb-4">IA para Vídeo e Criação</p>
+                            <div class="bg-pink-800 text-white px-4 py-2 rounded-xl text-sm border border-pink-600 hover:border-pink-500 transition-all duration-300">
+                                <i class="fas fa-magic mr-2"></i>
+                                Criar Vídeos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sites Online -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-4">
+                        <i class="fas fa-globe text-white"></i>
+                    </div>
+                    Sites Online
+                    <div class="ml-4 h-px bg-gradient-to-r from-green-500 to-transparent flex-1"></div>
+                </h2>
+                
+                <!-- Controles de Sites -->
+                <div class="bg-black border border-gray-800 rounded-2xl p-6 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-plus-circle text-green-400 mr-3"></i>
+                            <span class="text-white font-semibold">Gerenciar Sites</span>
+                        </div>
+                        <button 
+                            id="checkAllSitesBtn"
+                            class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 hover:from-blue-500/30 hover:to-cyan-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm transition-all duration-200 transform hover:scale-105 border border-blue-500/30 hover:border-blue-400/50"
+                        >
+                            <i class="fas fa-sync-alt mr-2"></i>
+                            Verificar Todos
+                        </button>
+                    </div>
+                    
+                    <!-- Formulário de Adição -->
+                    <form id="addSiteForm" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Nome do Site</label>
+                                <input 
+                                    type="text" 
+                                    id="siteNameInput"
+                                    class="w-full px-4 py-3 bg-black/30 border border-gray-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    placeholder="Ex: Google, YouTube..."
+                                    required
+                                >
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">URL do Site</label>
+                                <input 
+                                    type="url" 
+                                    id="siteUrlInput"
+                                    class="w-full px-4 py-3 bg-black/30 border border-gray-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    placeholder="https://exemplo.com"
+                                    required
+                                >
+                            </div>
+                            <div class="flex items-end">
+                                <button 
+                                    type="submit"
+                                    class="w-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 text-green-300 px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 border border-green-500/30 hover:border-green-400/50 font-medium"
+                                >
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Adicionar Site
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Lista de Sites Monitorados -->
+                <div id="sitesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Sites serão inseridos aqui dinamicamente -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Sistema de tempo em tempo real
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const loginTimeElement = document.getElementById('loginSystemTime');
+            if (loginTimeElement) {
+                loginTimeElement.textContent = timeString;
+            }
+        }
+
+        // Atualizar tempo a cada segundo
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Sistema de login
+        let loginAttempts = 0;
+        const maxAttempts = 3;
+        const correctPassword = "123456";
+
+        // Elementos do DOM
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginButton = document.getElementById('loginButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const attemptCounter = document.getElementById('attemptCounter');
+        const loginScreen = document.getElementById('loginScreen');
+        const adminPanel = document.getElementById('adminPanel');
+        const robotActivationOverlay = document.getElementById('robotActivationOverlay');
+
+        // Engrenagens
+        const gears = document.querySelectorAll('.gear');
+
+        // Função para ativar engrenagens
+        function activateGears() {
+            gears.forEach(gear => {
+                gear.classList.remove('idle');
+                gear.classList.add('active');
+            });
+        }
+
+        // Função para desativar engrenagens
+        function deactivateGears() {
+            gears.forEach(gear => {
+                gear.classList.remove('active');
+                gear.classList.add('idle');
+            });
+        }
+
+        // Função para piscar luzes de segurança
+        function blinkSecurityLights() {
+            const lights = document.querySelectorAll('.security-light');
+            lights.forEach((light, index) => {
+                setTimeout(() => {
+                    light.classList.add('active');
+                    setTimeout(() => {
+                        light.classList.remove('active');
+                    }, 200);
+                }, index * 100);
+            });
+        }
+
+        // Função para atualizar contador de tentativas
+        function updateAttemptCounter() {
+            attemptCounter.textContent = `${loginAttempts}/${maxAttempts}`;
+            
+            // Atualizar barras visuais
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach((bar, index) => {
+                if (index < loginAttempts) {
+                    bar.classList.add('active');
+                } else {
+                    bar.classList.remove('active');
+                }
+            });
+        }
+
+        // Função para mostrar overlay de ativação
+        function showRobotActivation() {
+            robotActivationOverlay.classList.add('active');
+            
+            setTimeout(() => {
+                robotActivationOverlay.classList.remove('active');
+                loginScreen.classList.add('hidden');
+                adminPanel.classList.remove('hidden');
+            }, 4000);
+        }
+
+        // Event listener para o formulário de login
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = passwordInput.value;
+            
+            // Ativar engrenagens durante o processo
+            activateGears();
+            blinkSecurityLights();
+            
+            // Simular processamento
+            loginButton.classList.add('loading');
+            loginButton.querySelector('.button-text').textContent = 'VERIFICANDO...';
+            
+            setTimeout(() => {
+                if (password === correctPassword) {
+                    // Login bem-sucedido
+                    errorMessage.classList.add('hidden');
+                    welcomeMessage.classList.remove('hidden');
+                    
+                    setTimeout(() => {
+                        showRobotActivation();
+                    }, 1000);
+                    
+                } else {
+                    // Login falhou
+                    loginAttempts++;
+                    updateAttemptCounter();
+                    
+                    welcomeMessage.classList.add('hidden');
+                    errorMessage.classList.remove('hidden');
+                    
+                    if (loginAttempts >= maxAttempts) {
+                        loginButton.disabled = true;
+                        loginButton.classList.add('loading');
+                        loginButton.querySelector('.button-text').textContent = 'BLOQUEADO';
+                        passwordInput.disabled = true;
+                    }
+                    
+                    // Limpar senha
+                    passwordInput.value = '';
+                }
+                
+                // Restaurar botão
+                if (loginAttempts < maxAttempts && password !== correctPassword) {
+                    loginButton.classList.remove('loading');
+                    loginButton.querySelector('.button-text').textContent = 'ENTRAR';
+                }
+                
+                // Desativar engrenagens
+                setTimeout(() => {
+                    deactivateGears();
+                }, 1000);
+                
+            }, 2000);
+        });
+
+        // Sistema de Banco de Dados de Emails
+        const emailDatabase = [
+            'emanuelvpaulino1@gmail.com',
+            'Mcdomdom39@gmail.com',
+            'Emanuelvpaulino17@gmail.com',
+            'Emanuelvpaulino15@gmail.com',
+            'Cajazeiraspbmemes@gmail.com',
+            'Emanuelvpaulino29@gmail.com',
+            'Emanuelvpaulino9@gmail.com',
+            'digitalexbrasil@gmail.com',
+            'Emanuelvpaulino26@gmail.com',
+            'Emanuelvpaulino27@gmail.com',
+            'Emanuelvpaulino28@gmail.com',
+            'Emanuelvpaulino30@gmail.com',
+            'emanuelvpaulino31@gmail.com',
+            'Emanuelvpaulino32@gmail.com',
+            'Emanuelvpaulino33@gmail.com',
+            'Emanuelvpaulino34@gmail.com',
+            'narradashistorias5@gmail.com',
+            'arthurdalmonteregis@gmail.com',
+            'menezesvictorr1@gmail.com',
+            'menezesvictor309@gmail.com',
+            'veomenezes@gmail.com'
+        ];
+
+        // Função para mostrar modal do banco de dados
+        function showDatabaseModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-black border border-gray-800 rounded-2xl p-6 max-w-4xl w-full max-h-[80vh] overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-database text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-white">Banco de Dados de Emails</h2>
+                                <p class="text-gray-400 text-sm">Total: ${emailDatabase.length} emails registrados</p>
+                            </div>
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Controles -->
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <div class="flex-1 min-w-64">
+                            <input 
+                                type="text" 
+                                id="emailSearch"
+                                class="w-full px-4 py-3 bg-black/30 border border-gray-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Pesquisar emails..."
+                            >
+                        </div>
+                        <button 
+                            onclick="exportEmails()"
+                            class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-all duration-200 font-medium"
+                        >
+                            <i class="fas fa-download mr-2"></i>
+                            Exportar
+                        </button>
+                        <button 
+                            onclick="copyAllEmails()"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 font-medium"
+                        >
+                            <i class="fas fa-copy mr-2"></i>
+                            Copiar Todos
+                        </button>
+                    </div>
+                    
+                    <!-- Lista de Emails -->
+                    <div class="bg-black/30 border border-gray-700 rounded-lg overflow-hidden max-h-96 overflow-y-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-1" id="emailList">
+                            ${emailDatabase.map((email, index) => `
+                                <div class="email-item flex items-center justify-between p-3 border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                                    <div class="flex items-center flex-1">
+                                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mr-3 text-xs font-bold text-white">
+                                            ${index + 1}
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="text-white font-mono text-sm">${email}</div>
+                                            <div class="text-gray-400 text-xs">
+                                                ${email.includes('emanuelvpaulino') ? 'Conta Principal' : 
+                                                  email.includes('menezes') ? 'Conta Secundária' : 
+                                                  'Conta Especial'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button 
+                                            onclick="copyEmail('${email}')"
+                                            class="text-blue-400 hover:text-blue-300 transition-colors p-1"
+                                            title="Copiar email"
+                                        >
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                        <button 
+                                            onclick="openEmail('${email}')"
+                                            class="text-green-400 hover:text-green-300 transition-colors p-1"
+                                            title="Abrir Gmail"
+                                        >
+                                            <i class="fas fa-envelope"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Estatísticas -->
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4 text-center">
+                            <div class="text-purple-400 text-2xl font-bold">${emailDatabase.filter(e => e.includes('emanuelvpaulino')).length}</div>
+                            <div class="text-gray-300 text-sm">Contas Emanuel</div>
+                        </div>
+                        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4 text-center">
+                            <div class="text-blue-400 text-2xl font-bold">${emailDatabase.filter(e => e.includes('menezes')).length}</div>
+                            <div class="text-gray-300 text-sm">Contas Menezes</div>
+                        </div>
+                        <div class="bg-green-900/20 border border-green-500/30 rounded-lg p-4 text-center">
+                            <div class="text-green-400 text-2xl font-bold">${emailDatabase.filter(e => !e.includes('emanuelvpaulino') && !e.includes('menezes')).length}</div>
+                            <div class="text-gray-300 text-sm">Outras Contas</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Funcionalidade de pesquisa
+            const searchInput = modal.querySelector('#emailSearch');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const emailItems = modal.querySelectorAll('.email-item');
+                
+                emailItems.forEach(item => {
+                    const email = item.querySelector('.font-mono').textContent.toLowerCase();
+                    if (email.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Função para copiar email individual
+        function copyEmail(email) {
+            navigator.clipboard.writeText(email).then(() => {
+                showNotification(`Email ${email} copiado!`, 'success');
+            });
+        }
+
+        // Função para copiar todos os emails
+        function copyAllEmails() {
+            const allEmails = emailDatabase.join('\n');
+            navigator.clipboard.writeText(allEmails).then(() => {
+                showNotification(`${emailDatabase.length} emails copiados!`, 'success');
+            });
+        }
+
+        // Função para exportar emails
+        function exportEmails() {
+            const emailText = emailDatabase.join('\n');
+            const blob = new Blob([emailText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'emails_database.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showNotification('Emails exportados com sucesso!', 'success');
+        }
+
+        // Função para abrir Gmail
+        function openEmail(email) {
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}`, '_blank');
+        }
+
+        // Função para mostrar notificações
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ${
+                type === 'success' ? 'bg-green-600 text-white' : 
+                type === 'error' ? 'bg-red-600 text-white' : 
+                'bg-blue-600 text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'} mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(full)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Sistema de Gerenciamento de Sites
+        let monitoredSites = [
+            { id: 1, name: 'Google', url: 'https://google.com', status: 'checking', responseTime: null },
+            { id: 2, name: 'YouTube', url: 'https://youtube.com', status: 'checking', responseTime: null },
+            { id: 3, name: 'GitHub', url: 'https://github.com', status: 'checking', responseTime: null }
+        ];
+
+        let nextSiteId = 4;
+
+        // Função para verificar status de um site
+        async function checkSiteStatus(site) {
+            const startTime = Date.now();
+            try {
+                // Simular verificação (em um ambiente real, usaria uma API de monitoramento)
+                await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 500));
+                
+                // Simular resultado aleatório para demonstração
+                const isOnline = Math.random() > 0.1; // 90% chance de estar online
+                const responseTime = Date.now() - startTime;
+                
+                site.status = isOnline ? 'online' : 'offline';
+                site.responseTime = responseTime;
+                
+                return { success: isOnline, responseTime };
+            } catch (error) {
+                site.status = 'offline';
+                site.responseTime = null;
+                return { success: false, responseTime: null };
+            }
+        }
+
+        // Função para renderizar sites
+        function renderSites() {
+            const container = document.getElementById('sitesContainer');
+            container.innerHTML = monitoredSites.map(site => `
+                <div class="site-card ${site.status}" data-site-id="${site.id}">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <div class="site-name">${site.name}</div>
+                            <div class="site-url">${site.url}</div>
+                        </div>
+                        <button 
+                            onclick="removeSite(${site.id})"
+                            class="text-red-400 hover:text-red-300 transition-colors p-2"
+                            title="Remover site"
+                        >
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="site-status">
+                        <span class="status-dot ${site.status}"></span>
+                        ${site.status === 'online' ? 'Online' : 
+                          site.status === 'offline' ? 'Offline' : 
+                          'Verificando...'}
+                    </div>
+                    
+                    ${site.responseTime ? `
+                        <div class="site-response-time">
+                            Tempo de resposta: ${site.responseTime}ms
+                        </div>
+                    ` : ''}
+                    
+                    <div class="site-actions">
+                        <button 
+                            onclick="visitSite('${site.url}')"
+                            class="site-btn visit"
+                        >
+                            <i class="fas fa-external-link-alt"></i>
+                            Visitar
+                        </button>
+                        <button 
+                            onclick="checkSingleSite(${site.id})"
+                            class="site-btn check"
+                        >
+                            <i class="fas fa-sync-alt"></i>
+                            Verificar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Função para adicionar novo site
+        function addSite(name, url) {
+            const newSite = {
+                id: nextSiteId++,
+                name: name,
+                url: url,
+                status: 'checking',
+                responseTime: null
+            };
+            
+            monitoredSites.push(newSite);
+            renderSites();
+            
+            // Verificar status do novo site
+            checkSingleSite(newSite.id);
+            
+            showNotification(`Site ${name} adicionado com sucesso!`, 'success');
+        }
+
+        // Função para remover site
+        function removeSite(siteId) {
+            const site = monitoredSites.find(s => s.id === siteId);
+            if (site) {
+                monitoredSites = monitoredSites.filter(s => s.id !== siteId);
+                renderSites();
+                showNotification(`Site ${site.name} removido!`, 'success');
+            }
+        }
+
+        // Função para visitar site
+        function visitSite(url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        // Função para verificar um site específico
+        async function checkSingleSite(siteId) {
+            const site = monitoredSites.find(s => s.id === siteId);
+            if (!site) return;
+            
+            site.status = 'checking';
+            renderSites();
+            
+            await checkSiteStatus(site);
+            renderSites();
+        }
+
+        // Função para verificar todos os sites
+        async function checkAllSites() {
+            // Marcar todos como verificando
+            monitoredSites.forEach(site => {
+                site.status = 'checking';
+            });
+            renderSites();
+            
+            // Verificar todos os sites em paralelo
+            const promises = monitoredSites.map(site => checkSiteStatus(site));
+            await Promise.all(promises);
+            
+            renderSites();
+            showNotification('Verificação de todos os sites concluída!', 'success');
+        }
+
+        // Event listeners
+        document.getElementById('addSiteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('siteNameInput').value.trim();
+            const url = document.getElementById('siteUrlInput').value.trim();
+            
+            if (name && url) {
+                // Verificar se o site já existe
+                const exists = monitoredSites.some(site => 
+                    site.url.toLowerCase() === url.toLowerCase() || 
+                    site.name.toLowerCase() === name.toLowerCase()
+                );
+                
+                if (exists) {
+                    showNotification('Este site já está sendo monitorado!', 'error');
+                    return;
+                }
+                
+                addSite(name, url);
+                
+                // Limpar formulário
+                document.getElementById('siteNameInput').value = '';
+                document.getElementById('siteUrlInput').value = '';
+            }
+        });
+
+        document.getElementById('checkAllSitesBtn').addEventListener('click', checkAllSites);
+
+        // Botão de áudio (funcional)
+        let audioEnabled = true;
+        document.getElementById('audioToggleBtn').addEventListener('click', function() {
+            audioEnabled = !audioEnabled;
+            const icon = document.getElementById('audioIcon');
+            
+            if (audioEnabled) {
+                icon.className = 'fas fa-volume-up';
+                this.classList.remove('bg-red-800');
+                this.classList.add('bg-purple-800');
+                showNotification('Áudio ativado', 'success');
+            } else {
+                icon.className = 'fas fa-volume-mute';
+                this.classList.remove('bg-purple-800');
+                this.classList.add('bg-red-800');
+                showNotification('Áudio desativado', 'info');
+            }
+        });
+
+        // Botão de editor (funcional)
+        document.getElementById('editBtn').addEventListener('click', function() {
+            const editorModal = document.createElement('div');
+            editorModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
+            editorModal.innerHTML = `
+                <div class="bg-black border border-gray-800 rounded-2xl p-6 max-w-4xl w-full max-h-[80vh] overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-edit text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-white">Editor de Código</h2>
+                                <p class="text-gray-400 text-sm">Editor integrado para desenvolvimento</p>
+                            </div>
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="bg-black/30 border border-gray-700 rounded-lg overflow-hidden">
+                        <div class="bg-gray-800 px-4 py-2 border-b border-gray-700">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                <span class="ml-4 text-gray-300 text-sm font-mono">script.js</span>
+                            </div>
+                        </div>
+                        <textarea 
+                            class="w-full h-96 p-4 bg-black text-green-400 font-mono text-sm resize-none focus:outline-none"
+                            placeholder="// Digite seu código aqui...
+console.log('Editor ARIA ativo!');
+
+function exemploFuncao() {
+    return 'Sistema funcionando perfeitamente!';
+}"
+                        ></textarea>
+                    </div>
+                    
+                    <div class="flex justify-end gap-4 mt-6">
+                        <button 
+                            onclick="this.closest('.fixed').remove()"
+                            class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all duration-200"
+                        >
+                            Fechar
+                        </button>
+                        <button 
+                            onclick="showNotification('Código salvo com sucesso!', 'success')"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200"
+                        >
+                            <i class="fas fa-save mr-2"></i>
+                            Salvar
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(editorModal);
+        });
+
+        // Event listener para o botão do banco de dados
+        document.getElementById('databaseBtn').addEventListener('click', showDatabaseModal);
+
+        // Botão de logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            adminPanel.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            
+            // Reset do sistema de login
+            loginAttempts = 0;
+            updateAttemptCounter();
+            passwordInput.value = '';
+            passwordInput.disabled = false;
+            loginButton.disabled = false;
+            loginButton.classList.remove('loading');
+            loginButton.querySelector('.button-text').textContent = 'ENTRAR';
+            errorMessage.classList.add('hidden');
+            welcomeMessage.classList.add('hidden');
+        });
+
+        // Inicializar sistema
+        updateAttemptCounter();
+        
+        // Renderizar sites iniciais quando o painel for carregado
+        setTimeout(() => {
+            if (!adminPanel.classList.contains('hidden')) {
+                renderSites();
+                // Verificar status inicial dos sites
+                setTimeout(checkAllSites, 1000);
+            }
+        }, 100);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9833e4f782c0f614',t:'MTc1ODU2NjA0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
