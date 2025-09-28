@@ -3,1590 +3,1048 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS Security Protocol - Advanced Authentication Interface</title>
+    <title>Central de Controle Futurista</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Importação de Fontes */
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
-
-        /* Reset e Base */
-        * {
-            margin: 0;
-            padding: 0;
+        body {
             box-sizing: border-box;
         }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: #000000;
-            color: #ffffff;
-            overflow-x: hidden;
+        
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            25% { transform: translateY(-30px) translateX(15px) rotate(90deg); }
+            50% { transform: translateY(-15px) translateX(-10px) rotate(180deg); }
+            75% { transform: translateY(-40px) translateX(20px) rotate(270deg); }
         }
-
-        /* Container Principal de Login */
-        .login-container {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-            position: relative;
-            min-height: 100vh;
+        
+        @keyframes login-glow {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(139, 92, 246, 0.4), 
+                           0 0 60px rgba(59, 130, 246, 0.2),
+                           inset 0 1px 0 rgba(255, 255, 255, 0.1); 
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(139, 92, 246, 0.7), 
+                           0 0 100px rgba(59, 130, 246, 0.4),
+                           inset 0 1px 0 rgba(255, 255, 255, 0.2); 
+            }
         }
-
-        /* Fundo Tecnológico */
-        .login-background {
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+        
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
-        /* Grid Pattern */
-        .grid-pattern {
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            width: 100%;
-            height: 100%;
-            animation: gridMove 20s linear infinite;
+        
+        @keyframes mesh-gradient {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(120deg) scale(1.1); }
+            66% { transform: rotate(240deg) scale(0.9); }
         }
-
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        /* Partículas Flutuantes */
-        .particles-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
+        
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.6);
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.8), rgba(59, 130, 246, 0.6));
             border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
+            animation: particle-float 8s infinite ease-in-out;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
         }
-
-        .particle-1 { top: 20%; left: 10%; animation-delay: 0s; }
-        .particle-2 { top: 60%; left: 20%; animation-delay: 1s; }
-        .particle-3 { top: 40%; left: 80%; animation-delay: 2s; }
-        .particle-4 { top: 80%; left: 70%; animation-delay: 3s; }
-        .particle-5 { top: 30%; left: 50%; animation-delay: 4s; }
-        .particle-6 { top: 70%; left: 30%; animation-delay: 5s; }
-
+        
+        .particle:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 25%; left: 85%; animation-delay: 1.5s; }
+        .particle:nth-child(3) { top: 65%; left: 25%; animation-delay: 3s; }
+        .particle:nth-child(4) { top: 85%; left: 75%; animation-delay: 4.5s; }
+        .particle:nth-child(5) { top: 45%; left: 95%; animation-delay: 6s; }
+        .particle:nth-child(6) { top: 75%; left: 5%; animation-delay: 7.5s; }
+        
+        .mesh-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(168, 85, 247, 0.2) 0%, transparent 50%);
+            animation: mesh-gradient 20s ease-in-out infinite;
+        }
+        
+        .login-container {
+            animation: slide-in 0.8s ease-out;
+        }
+        
+        .login-glow {
+            animation: login-glow 3s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(147, 51, 234, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(147, 51, 234, 0.8); }
+        }
+        
+        @keyframes data-flow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
-
-        /* Sistema de Engrenagens */
-        .gears-background {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
+        
+        @keyframes glow-border {
+            0%, 100% { border-color: rgba(147, 51, 234, 0.5); }
+            50% { border-color: rgba(59, 130, 246, 0.8); }
         }
-
-        .gear {
-            position: absolute;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, 
-                rgba(138, 43, 226, 0.1) 0deg,
-                rgba(138, 43, 226, 0.3) 45deg,
-                rgba(138, 43, 226, 0.1) 90deg,
-                rgba(138, 43, 226, 0.3) 135deg,
-                rgba(138, 43, 226, 0.1) 180deg,
-                rgba(138, 43, 226, 0.3) 225deg,
-                rgba(138, 43, 226, 0.1) 270deg,
-                rgba(138, 43, 226, 0.3) 315deg,
-                rgba(138, 43, 226, 0.1) 360deg
-            );
-            border: 2px solid rgba(138, 43, 226, 0.2);
-            transition: all 0.5s ease;
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
         }
-
-        .gear::before {
+        
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        .data-flow::before {
             content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60%;
-            height: 60%;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(138, 43, 226, 0.3);
-        }
-
-        .gear.idle {
-            animation: gearRotateIdle 20s linear infinite;
-        }
-
-        .gear.active {
-            animation: gearRotateActive 2s linear infinite;
-            border-color: rgba(138, 43, 226, 0.8);
-            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
-        }
-
-        .gear-1 { width: 120px; height: 120px; top: 15%; left: 10%; }
-        .gear-2 { width: 80px; height: 80px; top: 25%; right: 15%; }
-        .gear-3 { width: 100px; height: 100px; bottom: 20%; left: 20%; }
-        .gear-4 { width: 60px; height: 60px; bottom: 30%; right: 25%; }
-        .gear-5 { width: 90px; height: 90px; top: 50%; left: 5%; }
-        .gear-6 { width: 70px; height: 70px; top: 60%; right: 10%; }
-
-        @keyframes gearRotateIdle {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes gearRotateActive {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Container do Painel de Login */
-        .tech-login-container {
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 40px;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.5),
-                0 0 100px rgba(138, 43, 226, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Header Tecnológico */
-        .tech-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #22c55e;
-            box-shadow: 0 0 10px #22c55e;
-            animation: pulse 2s infinite;
-        }
-
-        .status-text {
-            font-size: 11px;
-            font-weight: 600;
-            color: #22c55e;
-            letter-spacing: 1px;
-        }
-
-        .system-time {
-            font-family: 'Orbitron', monospace;
-            font-size: 11px;
-            color: #8a2be2;
-            font-weight: 500;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Logo e Identificação */
-        .tech-logo-section {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .logo-container {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .logo-hexagon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #8a2be2, #4a148c);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin: 0 auto;
-        }
-
-        .hexagon-inner {
-            width: 70px;
-            height: 70px;
-            background: rgba(0, 0, 0, 0.3);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hexagon-glow {
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: linear-gradient(135deg, #8a2be2, #4a148c);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            filter: blur(10px);
-            opacity: 0.5;
-            z-index: -1;
-        }
-
-        .system-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 24px;
-            font-weight: 900;
-            color: #ffffff;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
-        }
-
-        .system-subtitle {
-            font-size: 14px;
-            color: #8a2be2;
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-
-        /* Formulário Tecnológico */
-        .tech-form {
-            space-y: 6;
-        }
-
-        .input-group {
-            margin-bottom: 24px;
-        }
-
-        .input-label {
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: #8a2be2;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .input-container {
-            position: relative;
-        }
-
-        .tech-input {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid rgba(138, 43, 226, 0.3);
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .tech-input:focus {
-            outline: none;
-            border-color: #8a2be2;
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
-            background: rgba(0, 0, 0, 0.6);
-        }
-
-        .tech-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* Contador de Tentativas */
-        .attempt-counter {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-        }
-
-        .counter-label {
-            font-size: 12px;
-            color: #8a2be2;
-            font-weight: 600;
-        }
-
-        .counter-display {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .counter-bars {
-            display: flex;
-            gap: 4px;
-        }
-
-        .bar {
-            width: 20px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .bar.active {
-            background: #ef4444;
-            box-shadow: 0 0 10px #ef4444;
-        }
-
-        /* Mensagens do Sistema */
-        .tech-message {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            animation: messageSlide 0.3s ease-out;
-        }
-
-        .error-message {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #f87171;
-        }
-
-        .success-message {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            color: #4ade80;
-        }
-
-        @keyframes messageSlide {
-            from { transform: translateY(-10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Botão Tecnológico */
-        .tech-button {
-            width: 100%;
-            position: relative;
-            background: linear-gradient(135deg, #8a2be2, #4a148c);
-            border: none;
-            border-radius: 12px;
-            padding: 18px 24px;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .tech-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
-        }
-
-        .tech-button:active {
-            transform: translateY(0);
-        }
-
-        .button-content {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .button-glow {
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .tech-button:hover .button-glow {
-            left: 100%;
-        }
-
-        .button-scan {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+            animation: data-flow 3s infinite;
         }
-
-        .tech-button:hover .button-scan {
-            transform: translateX(100%);
+        
+        .profile-card {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(147, 51, 234, 0.3);
+            animation: glow-border 3s infinite;
         }
-
-        /* Estados do Botão */
-        .tech-button.loading {
-            background: linear-gradient(135deg, #6b7280, #374151);
-            cursor: not-allowed;
+        
+        .profile-card:hover {
+            animation: float 0.6s ease-in-out infinite;
         }
-
-        .tech-button.loading .button-text::after {
+        
+        .profile-card::before {
             content: '';
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border: 2px solid #ffffff;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(147, 51, 234, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+        
+        .profile-card:hover::before {
+            opacity: 1;
+            animation: data-flow 1s infinite;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
             border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-left: 8px;
+            animation: sparkle 2s infinite;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Overlay de Ativação Robótica */
-        .robot-activation-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 9999;
+        
+        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 80%; left: 80%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { top: 60%; left: 30%; animation-delay: 1s; }
+        
+        .icon-container {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2));
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s ease;
-        }
-
-        .robot-activation-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .gears-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-        }
-
-        /* Engrenagens do Sistema Robótico */
-        .gear-robot {
-            position: absolute;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, 
-                rgba(138, 43, 226, 0.2) 0deg,
-                rgba(138, 43, 226, 0.8) 45deg,
-                rgba(138, 43, 226, 0.2) 90deg,
-                rgba(138, 43, 226, 0.8) 135deg,
-                rgba(138, 43, 226, 0.2) 180deg,
-                rgba(138, 43, 226, 0.8) 225deg,
-                rgba(138, 43, 226, 0.2) 270deg,
-                rgba(138, 43, 226, 0.8) 315deg,
-                rgba(138, 43, 226, 0.2) 360deg
-            );
-            border: 3px solid rgba(138, 43, 226, 0.6);
-            box-shadow: 0 0 30px rgba(138, 43, 226, 0.4);
-        }
-
-        .gear-robot::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50%;
-            height: 50%;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid rgba(138, 43, 226, 0.4);
-        }
-
-        /* Engrenagem Principal */
-        .gear-main {
-            width: 150px;
-            height: 150px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: gearRotateMain 3s ease-in-out;
-        }
-
-        /* Engrenagens Secundárias */
-        .gear-secondary-1 {
-            width: 100px;
-            height: 100px;
-            top: 20%;
-            left: 20%;
-            animation: gearRotateSecondary1 3.5s ease-in-out;
-        }
-
-        .gear-secondary-2 {
-            width: 80px;
-            height: 80px;
-            top: 25%;
-            right: 25%;
-            animation: gearRotateSecondary2 3.2s ease-in-out;
-        }
-
-        .gear-secondary-3 {
-            width: 90px;
-            height: 90px;
-            bottom: 30%;
-            left: 25%;
-            animation: gearRotateSecondary3 3.8s ease-in-out;
-        }
-
-        .gear-secondary-4 {
-            width: 70px;
-            height: 70px;
-            bottom: 25%;
-            right: 30%;
-            animation: gearRotateSecondary4 3.3s ease-in-out;
-        }
-
-        /* Engrenagens Pequenas */
-        .gear-small-1 {
-            width: 40px;
-            height: 40px;
-            top: 10%;
-            left: 50%;
-            animation: gearRotateSmall1 2.8s ease-in-out;
-        }
-
-        .gear-small-2 {
-            width: 35px;
-            height: 35px;
-            top: 50%;
-            right: 10%;
-            animation: gearRotateSmall2 2.5s ease-in-out;
-        }
-
-        .gear-small-3 {
-            width: 45px;
-            height: 45px;
-            bottom: 10%;
-            left: 45%;
-            animation: gearRotateSmall3 3.1s ease-in-out;
-        }
-
-        .gear-small-4 {
-            width: 30px;
-            height: 30px;
-            top: 45%;
-            left: 10%;
-            animation: gearRotateSmall4 2.7s ease-in-out;
-        }
-
-        /* Animações das Engrenagens */
-        @keyframes gearRotateMain {
-            0% { 
-                transform: translate(-50%, -50%) rotate(0deg) scale(0.3);
-                opacity: 0;
-                filter: blur(10px);
-            }
-            25% { 
-                opacity: 0.5;
-                filter: blur(5px);
-            }
-            100% { 
-                transform: translate(-50%, -50%) rotate(720deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
-        }
-
-        @keyframes gearRotateSecondary1 {
-            0% { 
-                transform: rotate(0deg) scale(0.2);
-                opacity: 0;
-                filter: blur(8px);
-            }
-            30% { 
-                opacity: 0.6;
-                filter: blur(4px);
-            }
-            100% { 
-                transform: rotate(-480deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
-        }
-
-        @keyframes gearRotateSecondary2 {
-            0% { 
-                transform: rotate(0deg) scale(0.2);
-                opacity: 0;
-                filter: blur(8px);
-            }
-            30% { 
-                opacity: 0.6;
-                filter: blur(4px);
-            }
-            100% { 
-                transform: rotate(600deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
-        }
-
-        @keyframes gearRotateSecondary3 {
-            0% { 
-                transform: rotate(0deg) scale(0.2);
-                opacity: 0;
-                filter: blur(8px);
-            }
-            30% { 
-                opacity: 0.6;
-                filter: blur(4px);
-            }
-            100% { 
-                transform: rotate(-540deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
-        }
-
-        @keyframes gearRotateSecondary4 {
-            0% { 
-                transform: rotate(0deg) scale(0.2);
-                opacity: 0;
-                filter: blur(8px);
-            }
-            30% { 
-                opacity: 0.6;
-                filter: blur(4px);
-            }
-            100% { 
-                transform: rotate(520deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
+            transition: all 0.3s;
         }
         
-        @keyframes gearRotateSmall1 {
-            0% { 
-                transform: rotate(0deg) scale(0.1);
-                opacity: 0;
-                filter: blur(6px);
-            }
-            40% { 
-                opacity: 0.7;
-                filter: blur(3px);
-            }
-            100% { 
-                transform: rotate(-360deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
+        .profile-card:hover .icon-container {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
         }
         
-        @keyframes gearRotateSmall2 {
-            0% { 
-                transform: rotate(0deg) scale(0.1);
-                opacity: 0;
-                filter: blur(6px);
-            }
-            40% { 
-                opacity: 0.7;
-                filter: blur(3px);
-            }
-            100% { 
-                transform: rotate(420deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
+        .glass-effect {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.9) 0%, 
+                rgba(30, 41, 59, 0.8) 50%, 
+                rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(139, 92, 246, 0.1);
         }
         
-        @keyframes gearRotateSmall3 {
-            0% { 
-                transform: rotate(0deg) scale(0.1);
-                opacity: 0;
-                filter: blur(6px);
-            }
-            40% { 
-                opacity: 0.7;
-                filter: blur(3px);
-            }
-            100% { 
-                transform: rotate(-450deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
+        .glass-effect-strong {
+            backdrop-filter: blur(25px) saturate(200%);
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.95) 0%, 
+                rgba(30, 41, 59, 0.9) 50%, 
+                rgba(15, 23, 42, 0.95) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 0 0 1px rgba(139, 92, 246, 0.2);
         }
         
-        @keyframes gearRotateSmall4 {
-            0% { 
-                transform: rotate(0deg) scale(0.1);
-                opacity: 0;
-                filter: blur(6px);
-            }
-            40% { 
-                opacity: 0.7;
-                filter: blur(3px);
-            }
-            100% { 
-                transform: rotate(380deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
+        .neon-text {
+            text-shadow: 
+                0 0 5px rgba(139, 92, 246, 0.8),
+                0 0 10px rgba(139, 92, 246, 0.6),
+                0 0 15px rgba(139, 92, 246, 0.4),
+                0 0 20px rgba(139, 92, 246, 0.2);
         }
         
-        /* Texto de Ativação Robótica */
-        .robot-activation-text {
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #8a2be2;
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            font-weight: bold;
-            letter-spacing: 3px;
-            text-align: center;
-            opacity: 0;
-            animation: robotTextActivation 4s ease-in-out;
+        .modern-button {
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.8) 0%, 
+                rgba(59, 130, 246, 0.8) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.6);
+            box-shadow: 
+                0 4px 15px rgba(139, 92, 246, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        @keyframes robotTextActivation {
-            0% { 
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px);
-                filter: blur(5px);
-            }
-            20% { 
-                opacity: 0.3;
-                filter: blur(3px);
-            }
-            40% { 
-                opacity: 0.6;
-                filter: blur(1px);
-            }
-            60% { 
-                opacity: 0.8;
-                transform: translateX(-50%) translateY(0px);
-                filter: blur(0px);
-            }
-            80% { 
-                opacity: 1;
-            }
-            100% { 
-                opacity: 0;
-                transform: translateX(-50%) translateY(-10px);
-            }
-        }
-
-        /* Informações do Sistema */
-        .system-info {
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            font-size: 11px;
-            color: #ffffff;
-        }
-        
-        /* Luzes de Segurança */
-        .security-lights {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-        
-        .security-light {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .security-light.active {
-            background: #ff0000;
-            box-shadow: 0 0 15px #ff0000;
-            animation: securityBlink 0.5s ease-in-out;
-        }
-
-        @keyframes securityBlink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        /* Estilos para Sites Online */
-        .site-card {
-            position: relative;
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-
-        .site-card.online {
-            border-color: rgba(34, 197, 94, 0.5);
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
-        }
-
-        .site-card.offline {
-            border-color: rgba(239, 68, 68, 0.5);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
-        }
-
-        .site-card.checking {
-            border-color: rgba(251, 191, 36, 0.5);
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
-        }
-
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-        }
-
-        .status-dot.online {
-            background: #22c55e;
-            box-shadow: 0 0 10px #22c55e;
-            animation: pulse 2s infinite;
-        }
-
-        .status-dot.offline {
-            background: #ef4444;
-            box-shadow: 0 0 10px #ef4444;
-        }
-
-        .status-dot.checking {
-            background: #fbbf24;
-            box-shadow: 0 0 10px #fbbf24;
-            animation: pulse 1s infinite;
-        }
-
-        .site-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .site-btn {
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .site-btn.visit {
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .site-btn.visit:hover {
-            background: rgba(59, 130, 246, 0.3);
-            border-color: rgba(59, 130, 246, 0.5);
-        }
-
-        .site-btn.check {
-            background: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        .site-btn.check:hover {
-            background: rgba(34, 197, 94, 0.3);
-            border-color: rgba(34, 197, 94, 0.5);
-        }
-
-        .site-btn.remove {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .site-btn.remove:hover {
-            background: rgba(239, 68, 68, 0.3);
-            border-color: rgba(239, 68, 68, 0.5);
-        }
-
-        .site-url {
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            color: #9ca3af;
-            word-break: break-all;
-        }
-
-        .site-name {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 4px;
-        }
-
-        .site-status {
-            font-size: 12px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .site-response-time {
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
-
-        /* Animação de carregamento para verificação */
-        .checking-animation {
-            animation: checkingPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes checkingPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        .modern-button:hover {
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 1) 0%, 
+                rgba(59, 130, 246, 1) 100%);
+            box-shadow: 
+                0 8px 25px rgba(139, 92, 246, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="login-container overflow-x-hidden">
-
-    <!-- Tela de Login Tecnológica -->
-    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden login-background">
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white font-sans relative overflow-x-hidden">
+    <!-- Mesh Background -->
+    <div class="mesh-bg fixed inset-0 z-0"></div>
+    
+    <!-- Grain Texture Overlay -->
+    <div class="fixed inset-0 z-0 opacity-30" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxmaWx0ZXIgaWQ9Im5vaXNlIj4KICAgICAgPGZlVHVyYnVsZW5jZSBiYXNlRnJlcXVlbmN5PSIwLjkiIG51bU9jdGF2ZXM9IjQiIHNlZWQ9IjIiLz4KICAgICAgPGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuNCIvPgo8L3N2Zz4K'); background-size: 200px 200px;"></div>
+    <!-- Tela de Login -->
+    <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center">
+        <!-- Partículas de fundo -->
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
         
-        <!-- Efeitos de Fundo Tecnológicos -->
-        <div class="absolute inset-0">
-            <!-- Grid Tecnológico -->
-            <div class="absolute inset-0 opacity-20">
-                <div class="grid-pattern"></div>
+        <!-- Container de Login -->
+        <div class="login-container glass-effect-strong p-10 rounded-3xl max-w-lg w-full mx-4 login-glow relative z-10">
+            <div class="text-center mb-10">
+                <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl relative">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-400 to-blue-400 rounded-2xl blur-lg opacity-50"></div>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="relative z-10">
+                        <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1Z" stroke="white" stroke-width="2" fill="rgba(255,255,255,0.15)"/>
+                        <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-bold neon-text mb-3 tracking-tight">ACESSO SEGURO</h1>
+                <p class="text-gray-300 text-base font-medium">Central de Controle Futurista</p>
+                <div class="w-16 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto mt-4 rounded-full"></div>
             </div>
             
-            <!-- Partículas Flutuantes -->
-            <div class="particles-container">
-                <div class="particle particle-1"></div>
-                <div class="particle particle-2"></div>
-                <div class="particle particle-3"></div>
-                <div class="particle particle-4"></div>
-                <div class="particle particle-5"></div>
-                <div class="particle particle-6"></div>
-            </div>
-        </div>
-        
-        <!-- Sistema de Engrenagens Interativas -->
-        <div class="gears-background">
-            <div class="gear gear-1 idle" id="gear1"></div>
-            <div class="gear gear-2 idle" id="gear2"></div>
-            <div class="gear gear-3 idle" id="gear3"></div>
-            <div class="gear gear-4 idle" id="gear4"></div>
-            <div class="gear gear-5 idle" id="gear5"></div>
-            <div class="gear gear-6 idle" id="gear6"></div>
-        </div>
-        
-        <!-- Painel de Login Principal -->
-        <div class="tech-login-container relative z-10">
-            <!-- Header Tecnológico -->
-            <div class="tech-header">
-                <div class="system-status">
-                    <div class="status-indicator online"></div>
-                    <span class="status-text">SISTEMA ONLINE</span>
-                </div>
-                <div class="system-time" id="loginSystemTime"></div>
-            </div>
-            
-            <!-- Logo e Identificação -->
-            <div class="tech-logo-section">
-                <div class="logo-container">
-                    <div class="logo-hexagon">
-                        <div class="hexagon-inner">
-                            <i class="fas fa-shield-alt text-purple-400 text-4xl"></i>
-                        </div>
-                        <div class="hexagon-glow"></div>
-                    </div>
-                </div>
-                <h1 class="system-title">NEXUS SECURITY PROTOCOL</h1>
-                <p class="system-subtitle">Advanced Authentication Interface</p>
-            </div>
-
-            <!-- Formulário de Autenticação -->
-            <form id="loginForm" class="tech-form">
-                <div class="input-group">
-                    <label class="input-label">
-                        <i class="fas fa-user mr-2"></i>
-                        USUÁRIO
-                    </label>
-                    <div class="input-container">
-                        <input 
-                            type="text" 
-                            id="usernameInput"
-                            class="tech-input"
-                            placeholder="Digite seu nome de usuário..."
-                            value="admin"
-                            readonly
-                        >
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label class="input-label">
-                        <i class="fas fa-key mr-2"></i>
-                        SENHA
-                    </label>
-                    <div class="input-container">
+            <form id="loginForm" class="space-y-8">
+                <div class="space-y-3">
+                    <label class="block text-sm font-semibold mb-3 text-purple-300 tracking-wide">SENHA DE ACESSO</label>
+                    <div class="relative group">
                         <input 
                             type="password" 
-                            id="passwordInput"
-                            class="tech-input"
-                            placeholder="Digite sua senha de segurança..."
-                            required
-                            autocomplete="current-password"
+                            id="passwordInput" 
+                            class="w-full bg-slate-800/60 border border-purple-500/40 rounded-xl px-5 py-4 text-white text-lg focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-all duration-300 backdrop-blur-sm"
+                            placeholder="Digite sua senha..."
+                            autocomplete="off"
                         >
+                        <button 
+                            type="button" 
+                            id="togglePassword" 
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-all duration-300 p-1 rounded-lg hover:bg-white/10"
+                        >
+                            👁️
+                        </button>
+                        <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     </div>
                 </div>
                 
-                <!-- Indicador de Tentativas -->
-                <div class="attempt-counter">
-                    <div class="counter-label">Tentativas:</div>
-                    <div class="counter-display">
-                        <span id="attemptCounter">0/3</span>
-                        <div class="counter-bars">
-                            <div class="bar bar-1"></div>
-                            <div class="bar bar-2"></div>
-                            <div class="bar bar-3"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Mensagens de Status -->
-                <div id="errorMessage" class="hidden tech-message error-message">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>
-                    <span>ACESSO NEGADO - Credenciais inválidas</span>
-                </div>
-                
-                <div id="welcomeMessage" class="hidden tech-message success-message">
-                    <i class="fas fa-check-circle mr-2"></i>
-                    <span>AUTENTICAÇÃO CONFIRMADA - Acesso liberado</span>
-                </div>
-                
-                <!-- Botão de Autenticação -->
                 <button 
-                    type="submit"
-                    id="loginButton"
-                    class="tech-button"
+                    type="submit" 
+                    class="w-full modern-button px-8 py-4 rounded-xl font-semibold text-lg tracking-wide"
+                    onmouseenter="techSound.play('hover')"
                 >
-                    <div class="button-content">
-                        <i class="fas fa-fingerprint mr-2"></i>
-                        <span class="button-text">ENTRAR</span>
-                    </div>
-                    <div class="button-glow"></div>
-                    <div class="button-scan"></div>
+                    🔓 ACESSAR SISTEMA
                 </button>
             </form>
+            
+            <div id="loginError" class="hidden mt-4 p-3 bg-red-600/20 border border-red-500/30 rounded-lg text-red-300 text-sm text-center">
+                ❌ Senha incorreta. Tente novamente.
+            </div>
+            
+            <div class="mt-6 text-center text-xs text-gray-400">
+                <div class="flex items-center justify-center space-x-2 mb-2">
+                    <div class="w-2 h-2 bg-green-400 rounded-full pulse-glow"></div>
+                    <span>Sistema Protegido</span>
+                </div>
+                <p>Acesso autorizado apenas para usuários credenciados</p>
+            </div>
+        </div>
+    </div>
 
-            <!-- Informações do Sistema -->
-            <div class="system-info">
-                <div class="info-grid">
-                    <div class="info-item">
-                        <i class="fas fa-server text-green-400"></i>
-                        <span>Servidor: Online</span>
+    <!-- Aplicação Principal (inicialmente oculta) -->
+    <div id="mainApp" class="hidden">
+        <!-- Chat Tradutor Lateral -->
+        <div id="translatorChat" class="fixed left-6 top-6 bottom-6 w-96 glass-effect-strong rounded-2xl z-40 flex flex-col transition-all duration-300 transform">
+            <!-- Header do Chat -->
+            <div class="flex justify-between items-center p-6 border-b border-purple-500/40">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-xl flex items-center justify-center">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 5H15M9 3V5M12 21L10 19H7L3 15V9L7 5H10L12 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 8L18 10L22 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                    <div class="info-item">
-                        <i class="fas fa-shield-alt text-blue-400"></i>
-                        <span>Criptografia: AES-256</span>
+                    <div>
+                        <h3 class="font-bold text-purple-300 text-lg">GOOGLE TRADUTOR</h3>
+                        <p class="text-xs text-gray-400">Traduções em tempo real</p>
                     </div>
-                    <div class="info-item">
-                        <i class="fas fa-lock text-yellow-400"></i>
-                        <span>Protocolo: SSL/TLS</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-eye text-purple-400"></i>
-                        <span>Monitoramento: Ativo</span>
-                    </div>
+                </div>
+                <button id="toggleTranslator" class="text-gray-400 hover:text-white transition-all duration-300 p-2 rounded-lg hover:bg-white/10" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Área de Mensagens -->
+            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
+                <div class="text-center text-gray-400 text-sm py-8">
+                    <div class="mb-2">🌐 Google Tradutor Ativo</div>
+                    <div>Digite em português para traduzir</div>
+                    <div class="text-xs mt-2 text-green-400">✓ Traduções precisas e naturais</div>
                 </div>
             </div>
             
-            <!-- Luzes de Segurança -->
-            <div class="security-lights">
-                <div class="security-light light-1"></div>
-                <div class="security-light light-2"></div>
-                <div class="security-light light-3"></div>
-                <div class="security-light light-4"></div>
+            <!-- Input de Tradução -->
+            <div class="p-6 border-t border-purple-500/40">
+                <form id="translatorForm" class="space-y-4">
+                    <div class="relative group">
+                        <input 
+                            type="text" 
+                            id="translatorInput" 
+                            placeholder="Digite em português..." 
+                            class="w-full bg-slate-800/60 border border-purple-500/40 rounded-xl px-4 py-3 text-white focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-all duration-300 backdrop-blur-sm pr-12"
+                            autocomplete="off"
+                        >
+                        <button 
+                            type="submit" 
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 modern-button p-2 rounded-lg"
+                            onmouseenter="techSound.play('hover')"
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    </div>
+                </form>
+                <div class="flex justify-between items-center mt-4 text-xs text-gray-400">
+                    <span class="flex items-center space-x-1">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Enter para traduzir</span>
+                    </span>
+                    <button id="clearChat" class="hover:text-white transition-colors flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-white/10" onclick="clearTranslatorChat()" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 6H5H21M8 6V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V6M19 6V20C19 20.5523 18.5523 21 18 21H6C5.44772 21 5 20.5523 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Limpar</span>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Overlay de Ativação Robótica -->
-    <div id="robotActivationOverlay" class="robot-activation-overlay">
-        <div class="gears-container">
-            <!-- Engrenagem Principal Central -->
-            <div class="gear-robot gear-main"></div>
-            
-            <!-- Engrenagens Secundárias -->
-            <div class="gear-robot gear-secondary-1"></div>
-            <div class="gear-robot gear-secondary-2"></div>
-            <div class="gear-robot gear-secondary-3"></div>
-            <div class="gear-robot gear-secondary-4"></div>
-            
-            <!-- Engrenagens Pequenas -->
-            <div class="gear-robot gear-small-1"></div>
-            <div class="gear-robot gear-small-2"></div>
-            <div class="gear-robot gear-small-3"></div>
-            <div class="gear-robot gear-small-4"></div>
-            
-            <!-- Texto de Ativação -->
-            <div class="robot-activation-text">
-                SISTEMA NEXUS ATIVANDO...<br>
-                <span style="font-size: 14px; opacity: 0.8;">INICIALIZANDO PROTOCOLOS DE SEGURANÇA</span>
+        <!-- Botão para mostrar/ocultar tradutor (quando minimizado) -->
+        <button id="showTranslator" class="hidden fixed left-4 top-4 glass-effect p-3 rounded-xl z-40 hover:scale-105 transition-all duration-300" onclick="toggleTranslatorVisibility()" onmouseenter="techSound.play('hover')" onclick="techSound.play('beep')">
+            <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full pulse-glow"></div>
+                <span class="text-purple-300 font-bold text-sm">🌐</span>
             </div>
-        </div>
-    </div>
+        </button>
 
-    <!-- Painel Principal -->
-    <div id="adminPanel" class="hidden min-h-screen bg-black">
         <!-- Header -->
-        <header class="bg-black border-b border-gray-800 shadow-2xl">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="flex justify-between items-center py-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="bg-gradient-to-r from-gray-700 to-gray-900 w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg">
-                            <i class="fas fa-shield-alt text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h1 class="text-2xl font-bold text-white">Centro de Comando ARIA</h1>
-                            <p class="text-gray-400 text-sm">Advanced Administrative Interface</p>
-                        </div>
+    <header class="glass-effect p-8 m-6 ml-96 rounded-2xl relative z-10">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-bold neon-text tracking-tight">CENTRAL DE CONTROLE</h1>
+            </div>
+            <div class="flex items-center space-x-8">
+                <nav class="flex items-center space-x-2">
+                    <button onclick="showEmailDatabase()" class="modern-button text-purple-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
+                        🗄️ Banco de Dados
+                    </button>
+                    <button id="editorToggle" class="modern-button text-blue-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
+                        ✏️ Editor
+                    </button>
+                    <button id="audioToggle" class="modern-button text-green-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')" onclick="toggleAudio()">
+                        🔊 Som
+                    </button>
+                    <button onclick="logout()" class="bg-gradient-to-r from-red-500/80 to-red-600/80 hover:from-red-500 hover:to-red-600 text-red-100 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border border-red-500/40" onmouseenter="techSound.play('hover')" onclick="techSound.play('logout'); setTimeout(logout, 400);">
+                        🚪 Encerrar
+                    </button>
+                </nav>
+                <div class="flex items-center space-x-4 border-l border-purple-500/40 pl-8">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-400 rounded-full pulse-glow"></div>
+                        <span class="text-green-400 font-medium text-sm">SISTEMA ONLINE</span>
                     </div>
-                    <div class="flex items-center space-x-4">
-                        <button 
-                            id="audioToggleBtn"
-                            class="bg-purple-800 hover:bg-purple-700 text-white px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium border border-purple-600 hover:border-purple-500 shadow-lg"
-                            title="Alternar Áudio"
-                        >
-                            <i class="fas fa-volume-up" id="audioIcon"></i>
-                        </button>
-                        <button 
-                            id="databaseBtn"
-                            class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-200 text-sm font-medium border border-gray-600 hover:border-gray-500 shadow-lg"
-                        >
-                            <i class="fas fa-database mr-2"></i>
-                            Banco de Dados
-                        </button>
-                        <button 
-                            id="editBtn"
-                            class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-200 text-sm font-medium border border-gray-600 hover:border-gray-500 shadow-lg"
-                        >
-                            <i class="fas fa-edit mr-2"></i>
-                            Editor
-                        </button>
-                        <button 
-                            id="logoutBtn"
-                            class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-200 font-medium border border-gray-600 hover:border-gray-500 shadow-lg"
-                        >
-                            <i class="fas fa-sign-out-alt mr-2"></i>
-                            Encerrar Sessão
-                        </button>
-                    </div>
+                    <div class="text-blue-400 font-mono text-sm bg-slate-800/50 px-3 py-1 rounded-lg">23:47:12</div>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Redes Sociais -->
-            <section class="mb-12">
-                <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center mr-4">
-                        <i class="fas fa-share-alt text-white"></i>
-                    </div>
-                    Redes Sociais
-                    <div class="ml-4 h-px bg-gradient-to-r from-cyan-400 to-transparent flex-1"></div>
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Canva -->
-                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-gray-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://www.canva.com', '_blank')">
-                        <div class="relative text-center">
-                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-gray-600 bg-white flex items-center justify-center shadow-lg transition-all duration-500">
-                                <svg viewBox="0 0 100 100" class="w-16 h-16">
-                                    <defs>
-                                        <linearGradient id="canvaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#00c4cc"/>
-                                            <stop offset="50%" style="stop-color:#7b2cbf"/>
-                                            <stop offset="100%" style="stop-color:#06ffa5"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <circle cx="50" cy="50" r="40" fill="url(#canvaGrad)"/>
-                                    <path d="M30 35 Q50 25 70 35 Q50 45 30 35" fill="white" opacity="0.9"/>
-                                    <path d="M35 50 Q50 40 65 50 Q50 60 35 50" fill="white" opacity="0.8"/>
-                                    <path d="M40 65 Q50 55 60 65 Q50 75 40 65" fill="white" opacity="0.7"/>
-                                </svg>
-                            </div>
-                            <h3 class="text-white font-bold text-xl mb-3 transition-colors duration-300">Canva</h3>
-                            <p class="text-gray-400 text-sm mb-4 transition-colors duration-300">Design Gráfico e Criação Visual</p>
-                            <div class="bg-gray-800 text-white px-4 py-2 rounded-xl text-sm border border-gray-600 hover:border-gray-500 transition-all duration-300">
-                                <i class="fas fa-palette mr-2"></i>
-                                Criar Designs
-                            </div>
-                        </div>
-                    </div>
+    <!-- Painel de Edição -->
+    <div id="editorPanel" class="hidden glass-effect p-8 m-6 ml-96 rounded-2xl relative z-10">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl flex items-center justify-center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 4H4C3.44772 4 3 4.44772 3 5V18C3 18.5523 3.44772 19 4 19H17C17.5523 19 18 18.5523 18 18V11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-            </section>
-
-            <!-- Ferramentas de IA -->
-            <section class="mb-12">
-                <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-4">
-                        <i class="fas fa-brain text-white"></i>
-                    </div>
-                    Ferramentas de Inteligência Artificial
-                    <div class="ml-4 h-px bg-gradient-to-r from-purple-500 to-transparent flex-1"></div>
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- LM Arena -->
-                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-purple-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://lmarena.ai/', '_blank')">
-                        <div class="relative text-center">
-                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-purple-600 bg-gradient-to-br from-purple-900 to-purple-700 flex items-center justify-center shadow-lg">
-                                <i class="fas fa-trophy text-yellow-400 text-3xl"></i>
-                            </div>
-                            <h3 class="text-white font-bold text-xl mb-3">LM Arena</h3>
-                            <p class="text-gray-400 text-sm mb-4">Batalha de Modelos de IA</p>
-                            <div class="bg-purple-800 text-white px-4 py-2 rounded-xl text-sm border border-purple-600 hover:border-purple-500 transition-all duration-300">
-                                <i class="fas fa-battle-net mr-2"></i>
-                                Comparar IAs
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Google AI Studio -->
-                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-blue-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://aistudio.google.com/app/prompts/new_chat', '_blank')">
-                        <div class="relative text-center">
-                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-blue-600 bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center shadow-lg">
-                                <i class="fab fa-google text-white text-3xl"></i>
-                            </div>
-                            <h3 class="text-white font-bold text-xl mb-3">Google AI Studio</h3>
-                            <p class="text-gray-400 text-sm mb-4">Gemini e Ferramentas Google</p>
-                            <div class="bg-blue-800 text-white px-4 py-2 rounded-xl text-sm border border-blue-600 hover:border-blue-500 transition-all duration-300">
-                                <i class="fas fa-code mr-2"></i>
-                                Criar Prompts
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ChatGPT -->
-                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-green-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://chatgpt.com/', '_blank')">
-                        <div class="relative text-center">
-                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-green-600 bg-gradient-to-br from-green-900 to-green-700 flex items-center justify-center shadow-lg">
-                                <i class="fas fa-comments text-white text-3xl"></i>
-                            </div>
-                            <h3 class="text-white font-bold text-xl mb-3">ChatGPT</h3>
-                            <p class="text-gray-400 text-sm mb-4">OpenAI GPT-4 e Assistente</p>
-                            <div class="bg-green-800 text-white px-4 py-2 rounded-xl text-sm border border-green-600 hover:border-green-500 transition-all duration-300">
-                                <i class="fas fa-robot mr-2"></i>
-                                Conversar
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Runway ML -->
-                    <div class="group relative bg-black border border-gray-800 rounded-2xl p-8 hover:border-pink-600 transition-all duration-500 cursor-pointer transform hover:scale-105 shadow-2xl" onclick="window.open('https://runwayml.com/', '_blank')">
-                        <div class="relative text-center">
-                            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-pink-600 bg-gradient-to-br from-pink-900 to-pink-700 flex items-center justify-center shadow-lg">
-                                <i class="fas fa-video text-white text-3xl"></i>
-                            </div>
-                            <h3 class="text-white font-bold text-xl mb-3">Runway ML</h3>
-                            <p class="text-gray-400 text-sm mb-4">IA para Vídeo e Criação</p>
-                            <div class="bg-pink-800 text-white px-4 py-2 rounded-xl text-sm border border-pink-600 hover:border-pink-500 transition-all duration-300">
-                                <i class="fas fa-magic mr-2"></i>
-                                Criar Vídeos
-                            </div>
-                        </div>
-                    </div>
+                <h2 class="text-2xl font-bold text-purple-300">MODO EDITOR</h2>
+            </div>
+            <button id="addProfileBtn" class="modern-button px-6 py-3 rounded-xl font-medium" onmouseenter="techSound.play('hover')" onclick="techSound.play('success')">
+                ➕ Adicionar Perfil
+            </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="bg-blue-900/30 p-4 rounded-lg">
+                <h3 class="font-bold mb-2 text-blue-300">Como Usar:</h3>
+                <ul class="space-y-1 opacity-90">
+                    <li>• Clique em "✏️" para editar um perfil</li>
+                    <li>• Use "Adicionar Perfil" para criar novos</li>
+                    <li>• Clique em "🗄️ Banco de Dados" para ver emails</li>
+                    <li>• Todas as alterações são salvas automaticamente</li>
+                    <li>• Use "🗑️" para excluir perfis</li>
+                </ul>
+            </div>
+            <div class="bg-purple-900/30 p-4 rounded-lg">
+                <h3 class="font-bold mb-2 text-purple-300">Status:</h3>
+                <div class="space-y-1 opacity-90">
+                    <div>Perfis: <span id="profileCount">5</span></div>
+                    <div>Última alteração: <span id="lastSaved">Nunca</span></div>
+                    <div class="text-green-400">✓ Auto-save ativo</div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </div>
 
-            <!-- Sites Online -->
-            <section class="mb-12">
-                <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-4">
-                        <i class="fas fa-globe text-white"></i>
+    <div class="p-6 pl-96">
+        <!-- Perfis e Ferramentas -->
+        <div class="glass-effect p-8 rounded-2xl max-w-6xl mx-auto relative z-10">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold neon-text mb-4 tracking-tight">FERRAMENTAS & PERFIS</h2>
+                <div class="w-24 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto rounded-full"></div>
+            </div>
+            <div id="profilesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="profile-card bg-gradient-to-br from-purple-600 via-purple-700 to-blue-600 hover:from-purple-500 hover:to-blue-500 p-6 rounded-xl transition-all duration-500 transform hover:scale-105 relative" draggable="true" data-profile-id="canva">
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="edit-controls hidden absolute top-2 right-2 space-x-2">
+                        <button class="edit-btn bg-blue-600 hover:bg-blue-700 p-1 rounded text-xs" onclick="editProfile('canva')">✏️</button>
+                        <button class="delete-btn bg-red-600 hover:bg-red-700 p-1 rounded text-xs" onclick="deleteProfile('canva')">🗑️</button>
                     </div>
-                    Sites Online
-                    <div class="ml-4 h-px bg-gradient-to-r from-green-500 to-transparent flex-1"></div>
-                </h2>
-                
-                <!-- Controles de Sites -->
-                <div class="bg-black border border-gray-800 rounded-2xl p-6 mb-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-plus-circle text-green-400 mr-3"></i>
-                            <span class="text-white font-semibold">Gerenciar Sites</span>
+                    <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer" class="block">
+                        <div class="icon-container">
+                            <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT5QEiPJMK3-aC-DViyfxxD8I8A-dWazNDz5OHd1D1NH20dmJqr" alt="Canva Logo" class="w-8 h-8 object-contain" onerror="this.src=''; this.alt='Logo não disponível'; this.style.display='none';">
                         </div>
-                        <button 
-                            id="checkAllSitesBtn"
-                            class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 hover:from-blue-500/30 hover:to-cyan-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm transition-all duration-200 transform hover:scale-105 border border-blue-500/30 hover:border-blue-400/50"
-                        >
-                            <i class="fas fa-sync-alt mr-2"></i>
-                            Verificar Todos
-                        </button>
-                    </div>
-                    
-                    <!-- Formulário de Adição -->
-                    <form id="addSiteForm" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Nome do Site</label>
-                                <input 
-                                    type="text" 
-                                    id="siteNameInput"
-                                    class="w-full px-4 py-3 bg-black/30 border border-gray-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                                    placeholder="Ex: Google, YouTube..."
-                                    required
-                                >
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">URL do Site</label>
-                                <input 
-                                    type="url" 
-                                    id="siteUrlInput"
-                                    class="w-full px-4 py-3 bg-black/30 border border-gray-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                                    placeholder="https://exemplo.com"
-                                    required
-                                >
-                            </div>
-                            <div class="flex items-end">
-                                <button 
-                                    type="submit"
-                                    class="w-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 text-green-300 px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 border border-green-500/30 hover:border-green-400/50 font-medium"
-                                >
-                                    <i class="fas fa-plus mr-2"></i>
-                                    Adicionar Site
-                                </button>
-                            </div>
+                        <div class="text-center relative z-10">
+                            <div class="text-xl font-bold mb-2 neon-text">Canva</div>
+                            <div class="text-sm opacity-90 mb-3">Design Gráfico e Criação Visual</div>
+                            <div class="text-xs px-3 py-1 bg-blue-500/30 rounded-full inline-block">🎨 Criar Designs</div>
                         </div>
-                    </form>
+                    </a>
                 </div>
                 
-                <!-- Lista de Sites Monitorados -->
-                <div id="sitesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Sites serão inseridos aqui dinamicamente -->
+                <div class="profile-card bg-gradient-to-br from-blue-600 via-blue-700 to-purple-600 hover:from-blue-500 hover:to-purple-500 p-6 rounded-xl transition-all duration-500 transform hover:scale-105 relative" draggable="true" data-profile-id="lmarena">
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="edit-controls hidden absolute top-2 right-2 space-x-2">
+                        <button class="edit-btn bg-blue-600 hover:bg-blue-700 p-1 rounded text-xs" onclick="editProfile('lmarena')">✏️</button>
+                        <button class="delete-btn bg-red-600 hover:bg-red-700 p-1 rounded text-xs" onclick="deleteProfile('lmarena')">🗑️</button>
+                    </div>
+                    <a href="https://lmarena.ai" target="_blank" rel="noopener noreferrer" class="block">
+                        <div class="icon-container">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="url(#arena-gradient)"/>
+                                <defs>
+                                    <linearGradient id="arena-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#3B82F6"/>
+                                        <stop offset="100%" style="stop-color:#8B5CF6"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="text-center relative z-10">
+                            <div class="text-xl font-bold mb-2 neon-text">LM Arena</div>
+                            <div class="text-sm opacity-90 mb-3">Batalha de Modelos de IA</div>
+                            <div class="text-xs px-3 py-1 bg-purple-500/30 rounded-full inline-block">⚔️ Comparar IAs</div>
+                        </div>
+                    </a>
                 </div>
-            </section>
-        </main>
+                
+                <div class="profile-card bg-gradient-to-br from-purple-600 via-purple-700 to-blue-600 hover:from-purple-500 hover:to-blue-500 p-6 rounded-xl transition-all duration-500 transform hover:scale-105 relative" draggable="true" data-profile-id="google">
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="edit-controls hidden absolute top-2 right-2 space-x-2">
+                        <button class="edit-btn bg-blue-600 hover:bg-blue-700 p-1 rounded text-xs" onclick="editProfile('google')">✏️</button>
+                        <button class="delete-btn bg-red-600 hover:bg-red-700 p-1 rounded text-xs" onclick="deleteProfile('google')">🗑️</button>
+                    </div>
+                    <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" class="block">
+                        <div class="icon-container">
+                            <img src="https://preview.redd.it/aistudio-got-a-new-logo-v0-sthjhbr3zfef1.jpeg?auto=webp&s=54bc9736c6ce0fe27319940d0144b6f3213772ba" alt="Google AI Studio Logo" class="w-8 h-8 object-contain" onerror="this.src=''; this.alt='Logo não disponível'; this.style.display='none';">
+                        </div>
+                        <div class="text-center relative z-10">
+                            <div class="text-xl font-bold mb-2 neon-text">Google AI Studio</div>
+                            <div class="text-sm opacity-90 mb-3">Gemini e Ferramentas Google</div>
+                            <div class="text-xs px-3 py-1 bg-blue-500/30 rounded-full inline-block">🚀 Criar Prompts</div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="profile-card bg-gradient-to-br from-blue-600 via-blue-700 to-purple-600 hover:from-blue-500 hover:to-purple-500 p-6 rounded-xl transition-all duration-500 transform hover:scale-105 relative" draggable="true" data-profile-id="chatgpt">
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="edit-controls hidden absolute top-2 right-2 space-x-2">
+                        <button class="edit-btn bg-blue-600 hover:bg-blue-700 p-1 rounded text-xs" onclick="editProfile('chatgpt')">✏️</button>
+                        <button class="delete-btn bg-red-600 hover:bg-red-700 p-1 rounded text-xs" onclick="deleteProfile('chatgpt')">🗑️</button>
+                    </div>
+                    <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer" class="block">
+                        <div class="icon-container">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/ChatGPT-Logo.svg/800px-ChatGPT-Logo.svg.png" alt="ChatGPT Logo" class="w-8 h-8 object-contain" onerror="this.src=''; this.alt='Logo não disponível'; this.style.display='none';">
+                        </div>
+                        <div class="text-center relative z-10">
+                            <div class="text-xl font-bold mb-2 neon-text">ChatGPT</div>
+                            <div class="text-sm opacity-90 mb-3">OpenAI GPT-4 e Assistente</div>
+                            <div class="text-xs px-3 py-1 bg-purple-500/30 rounded-full inline-block">💬 Conversar</div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="profile-card bg-gradient-to-br from-purple-600 via-purple-700 to-blue-600 hover:from-purple-500 hover:to-blue-500 p-6 rounded-xl transition-all duration-500 transform hover:scale-105 relative" draggable="true" data-profile-id="runway">
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="edit-controls hidden absolute top-2 right-2 space-x-2">
+                        <button class="edit-btn bg-blue-600 hover:bg-blue-700 p-1 rounded text-xs" onclick="editProfile('runway')">✏️</button>
+                        <button class="delete-btn bg-red-600 hover:bg-red-700 p-1 rounded text-xs" onclick="deleteProfile('runway')">🗑️</button>
+                    </div>
+                    <a href="https://runwayml.com" target="_blank" rel="noopener noreferrer" class="block">
+                        <div class="icon-container">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3qi8ShndOjduTYHfKz6AUPdFI4y5hD9uY8w&s" alt="Runway ML Logo" class="w-8 h-8 object-contain" onerror="this.src=''; this.alt='Logo não disponível'; this.style.display='none';">
+                        </div>
+                        <div class="text-center relative z-10">
+                            <div class="text-xl font-bold mb-2 neon-text">Runway ML</div>
+                            <div class="text-sm opacity-90 mb-3">IA para Vídeo e Criação</div>
+                            <div class="text-xs px-3 py-1 bg-blue-500/30 rounded-full inline-block">🎬 Criar Vídeos</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="editModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="glass-effect p-6 rounded-xl max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-4 text-purple-300">Editar Perfil</h3>
+            <form id="editForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Nome:</label>
+                    <input type="text" id="editName" class="w-full bg-slate-800 border border-purple-500/30 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Descrição:</label>
+                    <input type="text" id="editDescription" class="w-full bg-slate-800 border border-purple-500/30 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">URL:</label>
+                    <input type="url" id="editUrl" class="w-full bg-slate-800 border border-purple-500/30 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Imagem (URL):</label>
+                    <input type="url" id="editImage" class="w-full bg-slate-800 border border-purple-500/30 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Tag:</label>
+                    <input type="text" id="editTag" class="w-full bg-slate-800 border border-purple-500/30 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none">
+                </div>
+                <div class="flex space-x-3 pt-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 px-4 py-2 rounded-lg transition-all duration-300" onmouseenter="techSound.play('hover')" onclick="techSound.play('success')">
+                        Salvar
+                    </button>
+                    <button type="button" onclick="closeEditModal()" class="flex-1 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 px-4 py-2 rounded-lg transition-all duration-300" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Banco de Dados de Emails -->
+    <div id="emailModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="glass-effect p-6 rounded-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-purple-300">🗄️ Banco de Dados de Emails</h3>
+                <button onclick="closeEmailModal()" class="text-gray-400 hover:text-white text-xl">✕</button>
+            </div>
+            
+            <div class="mb-4 flex justify-between items-center">
+                <div class="text-sm text-gray-300">
+                    Total: <span class="text-blue-400 font-bold">21 emails</span>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="resetAllStatus()" class="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 px-4 py-2 rounded-lg text-sm transition-all duration-300" onmouseenter="techSound.play('hover')" onclick="techSound.play('notification')">
+                        🔄 Ativar Todos
+                    </button>
+                    <button onclick="copyAllEmails()" class="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 px-4 py-2 rounded-lg text-sm transition-all duration-300" onmouseenter="techSound.play('hover')" onclick="techSound.play('success')">
+                        📋 Copiar Todos
+                    </button>
+                </div>
+            </div>
+            
+            <div id="emailList" class="overflow-y-auto max-h-96 space-y-2">
+                <!-- Lista de emails será renderizada dinamicamente -->
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-purple-500/30">
+                <button onclick="closeEmailModal()" class="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 px-4 py-2 rounded-lg transition-all duration-300">
+                    Fechar
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Sistema de tempo em tempo real
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('pt-BR', { 
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            const loginTimeElement = document.getElementById('loginSystemTime');
-            if (loginTimeElement) {
-                loginTimeElement.textContent = timeString;
+        // Sistema de áudio tecnológico
+        class TechSoundSystem {
+            constructor() {
+                this.audioContext = null;
+                this.sounds = {};
+                this.isEnabled = true;
+                this.volume = 0.3;
+                this.init();
+            }
+            
+            init() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.createSounds();
+                    console.log('🔊 Sistema de áudio tecnológico inicializado');
+                } catch (error) {
+                    console.warn('⚠️ Áudio não suportado:', error);
+                    this.isEnabled = false;
+                }
+            }
+            
+            createSounds() {
+                // Som de beep futurista
+                this.sounds.beep = () => this.createBeep(800, 0.1);
+                this.sounds.success = () => this.createChord([523, 659, 784], 0.3);
+                this.sounds.error = () => this.createBeep(200, 0.2);
+                this.sounds.click = () => this.createBeep(1000, 0.05);
+                this.sounds.hover = () => this.createBeep(600, 0.03);
+                this.sounds.login = () => this.createSequence([400, 500, 600, 800], 0.1);
+                this.sounds.logout = () => this.createSequence([800, 600, 400, 200], 0.1);
+                this.sounds.notification = () => this.createChord([440, 554, 659], 0.2);
+            }
+            
+            createBeep(frequency, duration) {
+                if (!this.isEnabled || !this.audioContext) return;
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(this.volume, this.audioContext.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + duration);
+            }
+            
+            createChord(frequencies, duration) {
+                if (!this.isEnabled || !this.audioContext) return;
+                
+                frequencies.forEach((freq, index) => {
+                    setTimeout(() => this.createBeep(freq, duration), index * 50);
+                });
+            }
+            
+            createSequence(frequencies, duration) {
+                if (!this.isEnabled || !this.audioContext) return;
+                
+                frequencies.forEach((freq, index) => {
+                    setTimeout(() => this.createBeep(freq, duration), index * 100);
+                });
+            }
+            
+            play(soundName) {
+                if (this.sounds[soundName]) {
+                    this.sounds[soundName]();
+                }
+            }
+            
+            toggle() {
+                this.isEnabled = !this.isEnabled;
+                return this.isEnabled;
+            }
+        }
+        
+        // Inicializar sistema de som
+        const techSound = new TechSoundSystem();
+        
+        // Estado da aplicação
+        let isEditorMode = false;
+        let currentEditingId = null;
+        
+        // Perfis padrão (caso não existam dados salvos)
+        const defaultProfiles = [
+            {
+                id: 'canva',
+                name: 'Canva',
+                description: 'Design Gráfico e Criação Visual',
+                url: 'https://www.canva.com',
+                image: 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT5QEiPJMK3-aC-DViyfxxD8I8A-dWazNDz5OHd1D1NH20dmJqr',
+                tag: '🎨 Criar Designs',
+                gradient: 'from-purple-600 via-purple-700 to-blue-600'
+            },
+            {
+                id: 'lmarena',
+                name: 'LM Arena',
+                description: 'Batalha de Modelos de IA',
+                url: 'https://lmarena.ai',
+                image: null,
+                tag: '⚔️ Comparar IAs',
+                gradient: 'from-blue-600 via-blue-700 to-purple-600'
+            },
+            {
+                id: 'google',
+                name: 'Google AI Studio',
+                description: 'Gemini e Ferramentas Google',
+                url: 'https://aistudio.google.com',
+                image: 'https://preview.redd.it/aistudio-got-a-new-logo-v0-sthjhbr3zfef1.jpeg?auto=webp&s=54bc9736c6ce0fe27319940d0144b6f3213772ba',
+                tag: '🚀 Criar Prompts',
+                gradient: 'from-purple-600 via-purple-700 to-blue-600'
+            },
+            {
+                id: 'chatgpt',
+                name: 'ChatGPT',
+                description: 'OpenAI GPT-4 e Assistente',
+                url: 'https://chat.openai.com',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/ChatGPT-Logo.svg/800px-ChatGPT-Logo.svg.png',
+                tag: '💬 Conversar',
+                gradient: 'from-blue-600 via-blue-700 to-purple-600'
+            },
+            {
+                id: 'runway',
+                name: 'Runway ML',
+                description: 'IA para Vídeo e Criação',
+                url: 'https://runwayml.com',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3qi8ShndOjduTYHfKz6AUPdFI4y5hD9uY8w&s',
+                tag: '🎬 Criar Vídeos',
+                gradient: 'from-purple-600 via-purple-700 to-blue-600'
+            }
+        ];
+
+        // Sistema de persistência
+        const STORAGE_KEY = 'central_controle_profiles';
+        const EDITOR_MODE_KEY = 'central_controle_editor_mode';
+
+        // Carregar dados salvos ou usar padrões
+        let profiles = loadProfiles();
+
+        // Funções de persistência
+        function saveProfiles() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
+                console.log('✅ Perfis salvos com sucesso');
+                return true;
+            } catch (error) {
+                console.error('❌ Erro ao salvar perfis:', error);
+                return false;
             }
         }
 
-        // Atualizar tempo a cada segundo
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // Sistema de login
-        let loginAttempts = 0;
-        const maxAttempts = 3;
-        const correctPassword = "123456";
-
-        // Elementos do DOM
-        const loginForm = document.getElementById('loginForm');
-        const passwordInput = document.getElementById('passwordInput');
-        const loginButton = document.getElementById('loginButton');
-        const errorMessage = document.getElementById('errorMessage');
-        const welcomeMessage = document.getElementById('welcomeMessage');
-        const attemptCounter = document.getElementById('attemptCounter');
-        const loginScreen = document.getElementById('loginScreen');
-        const adminPanel = document.getElementById('adminPanel');
-        const robotActivationOverlay = document.getElementById('robotActivationOverlay');
-
-        // Engrenagens
-        const gears = document.querySelectorAll('.gear');
-
-        // Função para ativar engrenagens
-        function activateGears() {
-            gears.forEach(gear => {
-                gear.classList.remove('idle');
-                gear.classList.add('active');
-            });
-        }
-
-        // Função para desativar engrenagens
-        function deactivateGears() {
-            gears.forEach(gear => {
-                gear.classList.remove('active');
-                gear.classList.add('idle');
-            });
-        }
-
-        // Função para piscar luzes de segurança
-        function blinkSecurityLights() {
-            const lights = document.querySelectorAll('.security-light');
-            lights.forEach((light, index) => {
-                setTimeout(() => {
-                    light.classList.add('active');
-                    setTimeout(() => {
-                        light.classList.remove('active');
-                    }, 200);
-                }, index * 100);
-            });
-        }
-
-        // Função para atualizar contador de tentativas
-        function updateAttemptCounter() {
-            attemptCounter.textContent = `${loginAttempts}/${maxAttempts}`;
-            
-            // Atualizar barras visuais
-            const bars = document.querySelectorAll('.bar');
-            bars.forEach((bar, index) => {
-                if (index < loginAttempts) {
-                    bar.classList.add('active');
-                } else {
-                    bar.classList.remove('active');
+        function loadProfiles() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    console.log('✅ Perfis carregados do armazenamento');
+                    return parsed;
                 }
-            });
+            } catch (error) {
+                console.error('❌ Erro ao carregar perfis:', error);
+            }
+            
+            console.log('📦 Usando perfis padrão');
+            return [...defaultProfiles];
         }
 
-        // Função para mostrar overlay de ativação
-        function showRobotActivation() {
-            robotActivationOverlay.classList.add('active');
+        function saveEditorMode() {
+            try {
+                localStorage.setItem(EDITOR_MODE_KEY, JSON.stringify(isEditorMode));
+            } catch (error) {
+                console.error('❌ Erro ao salvar modo editor:', error);
+            }
+        }
+
+        function loadEditorMode() {
+            try {
+                const saved = localStorage.getItem(EDITOR_MODE_KEY);
+                if (saved !== null) {
+                    return JSON.parse(saved);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar modo editor:', error);
+            }
+            return false;
+        }
+
+        // Auto-save a cada mudança
+        function autoSave() {
+            if (saveProfiles()) {
+                updateLastSaved();
+                showSaveIndicator();
+            }
+        }
+
+        // Indicador visual de salvamento
+        function showSaveIndicator() {
+            const indicator = document.createElement('div');
+            indicator.className = 'fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+            indicator.innerHTML = '✅ Salvo automaticamente';
+            document.body.appendChild(indicator);
             
             setTimeout(() => {
-                robotActivationOverlay.classList.remove('active');
-                loginScreen.classList.add('hidden');
-                adminPanel.classList.remove('hidden');
-            }, 4000);
-        }
-
-        // Event listener para o formulário de login
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const password = passwordInput.value;
-            
-            // Ativar engrenagens durante o processo
-            activateGears();
-            blinkSecurityLights();
-            
-            // Simular processamento
-            loginButton.classList.add('loading');
-            loginButton.querySelector('.button-text').textContent = 'VERIFICANDO...';
-            
-            setTimeout(() => {
-                if (password === correctPassword) {
-                    // Login bem-sucedido
-                    errorMessage.classList.add('hidden');
-                    welcomeMessage.classList.remove('hidden');
-                    
-                    setTimeout(() => {
-                        showRobotActivation();
-                    }, 1000);
-                    
-                } else {
-                    // Login falhou
-                    loginAttempts++;
-                    updateAttemptCounter();
-                    
-                    welcomeMessage.classList.add('hidden');
-                    errorMessage.classList.remove('hidden');
-                    
-                    if (loginAttempts >= maxAttempts) {
-                        loginButton.disabled = true;
-                        loginButton.classList.add('loading');
-                        loginButton.querySelector('.button-text').textContent = 'BLOQUEADO';
-                        passwordInput.disabled = true;
-                    }
-                    
-                    // Limpar senha
-                    passwordInput.value = '';
-                }
-                
-                // Restaurar botão
-                if (loginAttempts < maxAttempts && password !== correctPassword) {
-                    loginButton.classList.remove('loading');
-                    loginButton.querySelector('.button-text').textContent = 'ENTRAR';
-                }
-                
-                // Desativar engrenagens
+                indicator.style.opacity = '0';
                 setTimeout(() => {
-                    deactivateGears();
-                }, 1000);
-                
+                    document.body.removeChild(indicator);
+                }, 300);
             }, 2000);
+        }
+
+        // Atualizar relógio
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { hour12: false });
+            document.querySelector('.text-blue-400').textContent = timeString;
+        }
+        
+        setInterval(updateClock, 1000);
+
+        // Função para toggle do áudio
+        function toggleAudio() {
+            const isEnabled = techSound.toggle();
+            const button = document.getElementById('audioToggle');
+            
+            if (isEnabled) {
+                button.innerHTML = '🔊 Som';
+                button.classList.remove('text-red-300', 'hover:text-red-100');
+                button.classList.add('text-green-300', 'hover:text-green-100');
+                techSound.play('beep');
+            } else {
+                button.innerHTML = '🔇 Mudo';
+                button.classList.remove('text-green-300', 'hover:text-green-100');
+                button.classList.add('text-red-300', 'hover:text-red-100');
+            }
+        }
+
+        // Toggle do modo editor
+        document.getElementById('editorToggle').addEventListener('click', function() {
+            isEditorMode = !isEditorMode;
+            const editorPanel = document.getElementById('editorPanel');
+            const editControls = document.querySelectorAll('.edit-controls');
+            
+            if (isEditorMode) {
+                editorPanel.classList.remove('hidden');
+                editControls.forEach(control => control.classList.remove('hidden'));
+                this.textContent = '👁️ Visualizar';
+                this.classList.add('bg-green-600/20');
+            } else {
+                editorPanel.classList.add('hidden');
+                editControls.forEach(control => control.classList.add('hidden'));
+                this.textContent = '✏️ Editor';
+                this.classList.remove('bg-green-600/20');
+            }
+            
+            // Salvar estado do editor
+            saveEditorMode();
         });
 
-        // Sistema de Banco de Dados de Emails
+        // Função para editar perfil
+        function editProfile(id) {
+            const profile = profiles.find(p => p.id === id);
+            if (!profile) return;
+
+            currentEditingId = id;
+            document.getElementById('editName').value = profile.name;
+            document.getElementById('editDescription').value = profile.description;
+            document.getElementById('editUrl').value = profile.url;
+            document.getElementById('editImage').value = profile.image || '';
+            document.getElementById('editTag').value = profile.tag;
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        // Função para fechar modal
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+            currentEditingId = null;
+        }
+
+        // Função para deletar perfil
+        function deleteProfile(id) {
+            if (confirm('Tem certeza que deseja excluir este perfil?')) {
+                profiles = profiles.filter(p => p.id !== id);
+                renderProfiles();
+                autoSave();
+            }
+        }
+
+        // Função para adicionar novo perfil
+        document.getElementById('addProfileBtn').addEventListener('click', function() {
+            const newId = 'profile_' + Date.now();
+            
+            const newProfile = {
+                id: newId,
+                name: 'Nova Ferramenta',
+                description: 'Descrição da ferramenta',
+                url: 'https://example.com',
+                image: null,
+                tag: '🔧 Nova Tag',
+                gradient: 'from-purple-600 via-purple-700 to-blue-600'
+            };
+            
+            profiles.push(newProfile);
+            renderProfiles();
+            autoSave();
+            editProfile(newId);
+        });
+
+        // Salvar edições
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const profile = profiles.find(p => p.id === currentEditingId);
+            if (!profile) return;
+
+            profile.name = document.getElementById('editName').value.trim() || 'Sem Nome';
+            profile.description = document.getElementById('editDescription').value.trim() || 'Sem Descrição';
+            profile.url = document.getElementById('editUrl').value.trim() || 'https://example.com';
+            profile.image = document.getElementById('editImage').value.trim() || null;
+            profile.tag = document.getElementById('editTag').value.trim() || '🔧 Tag';
+
+            renderProfiles();
+            closeEditModal();
+            autoSave();
+        });
+
+        // Renderizar perfis
+        function renderProfiles() {
+            const container = document.getElementById('profilesContainer');
+            container.innerHTML = '';
+
+            profiles.forEach(profile => {
+                const profileDiv = document.createElement('div');
+                profileDiv.className = `profile-card bg-gradient-to-br ${profile.gradient} hover:from-purple-500 hover:to-blue-500 p-6 rounded-xl transition-all duration-500 transform hover:scale-105 relative`;
+                profileDiv.draggable = true;
+                profileDiv.setAttribute('data-profile-id', profile.id);
+
+                const iconContent = profile.image ? 
+                    `<img src="${profile.image}" alt="${profile.name} Logo" class="w-8 h-8 object-contain" onerror="this.src=''; this.alt='Logo não disponível'; this.style.display='none';">` :
+                    `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="url(#gradient-${profile.id})"/>
+                        <defs>
+                            <linearGradient id="gradient-${profile.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3B82F6"/>
+                                <stop offset="100%" style="stop-color:#8B5CF6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>`;
+
+                profileDiv.innerHTML = `
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="edit-controls ${isEditorMode ? '' : 'hidden'} absolute top-2 right-2 space-x-2">
+                        <button class="edit-btn bg-blue-600 hover:bg-blue-700 p-1 rounded text-xs" onclick="editProfile('${profile.id}')" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">✏️</button>
+                        <button class="delete-btn bg-red-600 hover:bg-red-700 p-1 rounded text-xs" onclick="deleteProfile('${profile.id}')" onmouseenter="techSound.play('hover')" onclick="techSound.play('error')">🗑️</button>
+                    </div>
+                    <a href="${profile.url}" target="_blank" rel="noopener noreferrer" class="block" onmouseenter="techSound.play('hover')" onclick="techSound.play('beep')">
+                        <div class="icon-container">
+                            ${iconContent}
+                        </div>
+                        <div class="text-center relative z-10">
+                            <div class="text-xl font-bold mb-2 neon-text">${profile.name}</div>
+                            <div class="text-sm opacity-90 mb-3">${profile.description}</div>
+                            <div class="text-xs px-3 py-1 bg-blue-500/30 rounded-full inline-block">${profile.tag}</div>
+                        </div>
+                    </a>
+                `;
+
+                container.appendChild(profileDiv);
+            });
+
+            // Atualizar contador
+            document.getElementById('profileCount').textContent = profiles.length;
+        }
+
+        // Atualizar timestamp
+        function updateLastSaved() {
+            const now = new Date();
+            document.getElementById('lastSaved').textContent = now.toLocaleTimeString('pt-BR');
+        }
+
+        // Banco de dados de emails com sistema de pontuação
         const emailDatabase = [
             'emanuelvpaulino1@gmail.com',
             'Mcdomdom39@gmail.com',
@@ -1611,479 +1069,675 @@
             'veomenezes@gmail.com'
         ];
 
-        // Função para mostrar modal do banco de dados
-        function showDatabaseModal() {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
-            modal.innerHTML = `
-                <div class="bg-black border border-gray-800 rounded-2xl p-6 max-w-4xl w-full max-h-[80vh] overflow-hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-4">
-                                <i class="fas fa-database text-white"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-2xl font-bold text-white">Banco de Dados de Emails</h2>
-                                <p class="text-gray-400 text-sm">Total: ${emailDatabase.length} emails registrados</p>
-                            </div>
-                        </div>
-                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white transition-colors">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
-                    </div>
-                    
-                    <!-- Controles -->
-                    <div class="flex flex-wrap gap-4 mb-6">
-                        <div class="flex-1 min-w-64">
-                            <input 
-                                type="text" 
-                                id="emailSearch"
-                                class="w-full px-4 py-3 bg-black/30 border border-gray-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Pesquisar emails..."
-                            >
-                        </div>
-                        <button 
-                            onclick="exportEmails()"
-                            class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-all duration-200 font-medium"
-                        >
-                            <i class="fas fa-download mr-2"></i>
-                            Exportar
-                        </button>
-                        <button 
-                            onclick="copyAllEmails()"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 font-medium"
-                        >
-                            <i class="fas fa-copy mr-2"></i>
-                            Copiar Todos
-                        </button>
-                    </div>
-                    
-                    <!-- Lista de Emails -->
-                    <div class="bg-black/30 border border-gray-700 rounded-lg overflow-hidden max-h-96 overflow-y-auto">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-1" id="emailList">
-                            ${emailDatabase.map((email, index) => `
-                                <div class="email-item flex items-center justify-between p-3 border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
-                                    <div class="flex items-center flex-1">
-                                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mr-3 text-xs font-bold text-white">
-                                            ${index + 1}
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="text-white font-mono text-sm">${email}</div>
-                                            <div class="text-gray-400 text-xs">
-                                                ${email.includes('emanuelvpaulino') ? 'Conta Principal' : 
-                                                  email.includes('menezes') ? 'Conta Secundária' : 
-                                                  'Conta Especial'}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <button 
-                                            onclick="copyEmail('${email}')"
-                                            class="text-blue-400 hover:text-blue-300 transition-colors p-1"
-                                            title="Copiar email"
-                                        >
-                                            <i class="fas fa-copy"></i>
-                                        </button>
-                                        <button 
-                                            onclick="openEmail('${email}')"
-                                            class="text-green-400 hover:text-green-300 transition-colors p-1"
-                                            title="Abrir Gmail"
-                                        >
-                                            <i class="fas fa-envelope"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    
-                    <!-- Estatísticas -->
-                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4 text-center">
-                            <div class="text-purple-400 text-2xl font-bold">${emailDatabase.filter(e => e.includes('emanuelvpaulino')).length}</div>
-                            <div class="text-gray-300 text-sm">Contas Emanuel</div>
-                        </div>
-                        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4 text-center">
-                            <div class="text-blue-400 text-2xl font-bold">${emailDatabase.filter(e => e.includes('menezes')).length}</div>
-                            <div class="text-gray-300 text-sm">Contas Menezes</div>
-                        </div>
-                        <div class="bg-green-900/20 border border-green-500/30 rounded-lg p-4 text-center">
-                            <div class="text-green-400 text-2xl font-bold">${emailDatabase.filter(e => !e.includes('emanuelvpaulino') && !e.includes('menezes')).length}</div>
-                            <div class="text-gray-300 text-sm">Outras Contas</div>
-                        </div>
-                    </div>
-                </div>
-            `;
+        // Sistema de status ativado/desativado
+        const STATUS_STORAGE_KEY = 'central_controle_status';
+        let emailStatus = loadEmailStatus();
+
+        function loadEmailStatus() {
+            try {
+                const saved = localStorage.getItem(STATUS_STORAGE_KEY);
+                if (saved) {
+                    return JSON.parse(saved);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar status:', error);
+            }
             
-            document.body.appendChild(modal);
+            // Inicializar todos os emails como ativados
+            const status = {};
+            emailDatabase.forEach(email => {
+                status[email] = true;
+            });
+            return status;
+        }
+
+        function saveEmailStatus() {
+            try {
+                localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(emailStatus));
+                return true;
+            } catch (error) {
+                console.error('❌ Erro ao salvar status:', error);
+                return false;
+            }
+        }
+
+        function toggleEmailStatus(email) {
+            emailStatus[email] = !emailStatus[email];
+            saveEmailStatus();
+            renderEmailDatabase();
             
-            // Funcionalidade de pesquisa
-            const searchInput = modal.querySelector('#emailSearch');
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const emailItems = modal.querySelectorAll('.email-item');
-                
-                emailItems.forEach(item => {
-                    const email = item.querySelector('.font-mono').textContent.toLowerCase();
-                    if (email.includes(searchTerm)) {
-                        item.style.display = 'flex';
-                    } else {
-                        item.style.display = 'none';
-                    }
+            // Mostrar indicador de mudança
+            const indicator = document.createElement('div');
+            indicator.className = 'fixed top-4 right-4 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+            
+            if (emailStatus[email]) {
+                indicator.classList.add('bg-green-600');
+                indicator.innerHTML = `✅ ${email.split('@')[0]} ativado`;
+            } else {
+                indicator.classList.add('bg-red-600');
+                indicator.innerHTML = `❌ ${email.split('@')[0]} desativado`;
+            }
+            
+            document.body.appendChild(indicator);
+            
+            setTimeout(() => {
+                indicator.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(indicator);
+                }, 300);
+            }, 2000);
+        }
+
+        function resetAllStatus() {
+            if (confirm('🔄 Ativar todos os emails?')) {
+                emailDatabase.forEach(email => {
+                    emailStatus[email] = true;
                 });
+                saveEmailStatus();
+                renderEmailDatabase();
+                
+                const indicator = document.createElement('div');
+                indicator.className = 'fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+                indicator.innerHTML = '🔄 Todos os emails ativados!';
+                document.body.appendChild(indicator);
+                
+                setTimeout(() => {
+                    indicator.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(indicator);
+                    }, 300);
+                }, 2000);
+            }
+        }
+
+        // Função para renderizar banco de dados
+        function renderEmailDatabase() {
+            const emailList = document.getElementById('emailList');
+            emailList.innerHTML = '';
+
+            emailDatabase.forEach(email => {
+                const isActive = emailStatus[email] !== false;
+                
+                const emailDiv = document.createElement('div');
+                emailDiv.className = `email-item bg-slate-800/50 p-3 rounded-lg flex justify-between items-center hover:bg-slate-700/50 transition-colors ${!isActive ? 'opacity-50' : ''}`;
+                
+                emailDiv.innerHTML = `
+                    <div class="flex items-center space-x-3 flex-1">
+                        <div class="flex items-center space-x-2">
+                            <button onclick="toggleEmailStatus('${email}')" class="px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${isActive ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
+                                ${isActive ? '✅ ATIVO' : '❌ INATIVO'}
+                            </button>
+                        </div>
+                        <span class="text-white flex-1">${email}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="copyEmail('${email}')" class="text-blue-400 hover:text-blue-300 text-sm" onmouseenter="techSound.play('hover')" onclick="techSound.play('beep')">
+                            📋
+                        </button>
+                    </div>
+                `;
+                
+                emailList.appendChild(emailDiv);
             });
         }
 
-        // Função para copiar email individual
+        // Função para mostrar banco de dados
+        function showEmailDatabase() {
+            renderEmailDatabase();
+            document.getElementById('emailModal').classList.remove('hidden');
+        }
+
+        // Função para fechar modal de emails
+        function closeEmailModal() {
+            document.getElementById('emailModal').classList.add('hidden');
+        }
+
+        // Função para copiar email
         function copyEmail(email) {
             navigator.clipboard.writeText(email).then(() => {
-                showNotification(`Email ${email} copiado!`, 'success');
+                showCopyIndicator(email);
+            }).catch(() => {
+                // Fallback para navegadores mais antigos
+                const textArea = document.createElement('textarea');
+                textArea.value = email;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyIndicator(email);
             });
+        }
+
+        // Indicador de cópia
+        function showCopyIndicator(email) {
+            const indicator = document.createElement('div');
+            indicator.className = 'fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+            indicator.innerHTML = `📋 ${email} copiado!`;
+            document.body.appendChild(indicator);
+            
+            setTimeout(() => {
+                indicator.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(indicator);
+                }, 300);
+            }, 2000);
         }
 
         // Função para copiar todos os emails
         function copyAllEmails() {
             const allEmails = emailDatabase.join('\n');
             navigator.clipboard.writeText(allEmails).then(() => {
-                showNotification(`${emailDatabase.length} emails copiados!`, 'success');
-            });
-        }
-
-        // Função para exportar emails
-        function exportEmails() {
-            const emailText = emailDatabase.join('\n');
-            const blob = new Blob([emailText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'emails_database.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showNotification('Emails exportados com sucesso!', 'success');
-        }
-
-        // Função para abrir Gmail
-        function openEmail(email) {
-            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}`, '_blank');
-        }
-
-        // Função para mostrar notificações
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ${
-                type === 'success' ? 'bg-green-600 text-white' : 
-                type === 'error' ? 'bg-red-600 text-white' : 
-                'bg-blue-600 text-white'
-            }`;
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'} mr-2"></i>
-                    ${message}
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(full)';
+                const indicator = document.createElement('div');
+                indicator.className = 'fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+                indicator.innerHTML = `📋 Todos os ${emailDatabase.length} emails copiados!`;
+                document.body.appendChild(indicator);
+                
                 setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-
-        // Sistema de Gerenciamento de Sites
-        let monitoredSites = [
-            { id: 1, name: 'Google', url: 'https://google.com', status: 'checking', responseTime: null },
-            { id: 2, name: 'YouTube', url: 'https://youtube.com', status: 'checking', responseTime: null },
-            { id: 3, name: 'GitHub', url: 'https://github.com', status: 'checking', responseTime: null }
-        ];
-
-        let nextSiteId = 4;
-
-        // Função para verificar status de um site
-        async function checkSiteStatus(site) {
-            const startTime = Date.now();
-            try {
-                // Simular verificação (em um ambiente real, usaria uma API de monitoramento)
-                await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 500));
-                
-                // Simular resultado aleatório para demonstração
-                const isOnline = Math.random() > 0.1; // 90% chance de estar online
-                const responseTime = Date.now() - startTime;
-                
-                site.status = isOnline ? 'online' : 'offline';
-                site.responseTime = responseTime;
-                
-                return { success: isOnline, responseTime };
-            } catch (error) {
-                site.status = 'offline';
-                site.responseTime = null;
-                return { success: false, responseTime: null };
-            }
-        }
-
-        // Função para renderizar sites
-        function renderSites() {
-            const container = document.getElementById('sitesContainer');
-            container.innerHTML = monitoredSites.map(site => `
-                <div class="site-card ${site.status}" data-site-id="${site.id}">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex-1">
-                            <div class="site-name">${site.name}</div>
-                            <div class="site-url">${site.url}</div>
-                        </div>
-                        <button 
-                            onclick="removeSite(${site.id})"
-                            class="text-red-400 hover:text-red-300 transition-colors p-2"
-                            title="Remover site"
-                        >
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="site-status">
-                        <span class="status-dot ${site.status}"></span>
-                        ${site.status === 'online' ? 'Online' : 
-                          site.status === 'offline' ? 'Offline' : 
-                          'Verificando...'}
-                    </div>
-                    
-                    ${site.responseTime ? `
-                        <div class="site-response-time">
-                            Tempo de resposta: ${site.responseTime}ms
-                        </div>
-                    ` : ''}
-                    
-                    <div class="site-actions">
-                        <button 
-                            onclick="visitSite('${site.url}')"
-                            class="site-btn visit"
-                        >
-                            <i class="fas fa-external-link-alt"></i>
-                            Visitar
-                        </button>
-                        <button 
-                            onclick="checkSingleSite(${site.id})"
-                            class="site-btn check"
-                        >
-                            <i class="fas fa-sync-alt"></i>
-                            Verificar
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Função para adicionar novo site
-        function addSite(name, url) {
-            const newSite = {
-                id: nextSiteId++,
-                name: name,
-                url: url,
-                status: 'checking',
-                responseTime: null
-            };
-            
-            monitoredSites.push(newSite);
-            renderSites();
-            
-            // Verificar status do novo site
-            checkSingleSite(newSite.id);
-            
-            showNotification(`Site ${name} adicionado com sucesso!`, 'success');
-        }
-
-        // Função para remover site
-        function removeSite(siteId) {
-            const site = monitoredSites.find(s => s.id === siteId);
-            if (site) {
-                monitoredSites = monitoredSites.filter(s => s.id !== siteId);
-                renderSites();
-                showNotification(`Site ${site.name} removido!`, 'success');
-            }
-        }
-
-        // Função para visitar site
-        function visitSite(url) {
-            window.open(url, '_blank', 'noopener,noreferrer');
-        }
-
-        // Função para verificar um site específico
-        async function checkSingleSite(siteId) {
-            const site = monitoredSites.find(s => s.id === siteId);
-            if (!site) return;
-            
-            site.status = 'checking';
-            renderSites();
-            
-            await checkSiteStatus(site);
-            renderSites();
-        }
-
-        // Função para verificar todos os sites
-        async function checkAllSites() {
-            // Marcar todos como verificando
-            monitoredSites.forEach(site => {
-                site.status = 'checking';
+                    indicator.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(indicator);
+                    }, 300);
+                }, 2000);
             });
-            renderSites();
-            
-            // Verificar todos os sites em paralelo
-            const promises = monitoredSites.map(site => checkSiteStatus(site));
-            await Promise.all(promises);
-            
-            renderSites();
-            showNotification('Verificação de todos os sites concluída!', 'success');
         }
 
-        // Event listeners
-        document.getElementById('addSiteForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Inicialização completa do sistema
+        function initializeApp() {
+            console.log('🚀 Inicializando Central de Controle...');
             
-            const name = document.getElementById('siteNameInput').value.trim();
-            const url = document.getElementById('siteUrlInput').value.trim();
+            // Carregar estado do editor
+            isEditorMode = loadEditorMode();
             
-            if (name && url) {
-                // Verificar se o site já existe
-                const exists = monitoredSites.some(site => 
-                    site.url.toLowerCase() === url.toLowerCase() || 
-                    site.name.toLowerCase() === name.toLowerCase()
-                );
+            // Aplicar estado do editor na interface
+            const editorToggle = document.getElementById('editorToggle');
+            const editorPanel = document.getElementById('editorPanel');
+            const editControls = document.querySelectorAll('.edit-controls');
+            
+            if (isEditorMode) {
+                editorPanel.classList.remove('hidden');
+                editControls.forEach(control => control.classList.remove('hidden'));
+                editorToggle.textContent = '👁️ Visualizar';
+                editorToggle.classList.add('bg-green-600/20');
+            }
+            
+            // Renderizar perfis
+            renderProfiles();
+            
+            console.log('✅ Sistema inicializado com sucesso!');
+            console.log(`📊 ${profiles.length} perfis carregados`);
+            console.log(`🎛️ Modo editor: ${isEditorMode ? 'Ativo' : 'Inativo'}`);
+        }
+
+        // Função para resetar dados (para debug)
+        function resetData() {
+            if (confirm('⚠️ Isso irá apagar todos os dados salvos. Continuar?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(EDITOR_MODE_KEY);
+                location.reload();
+            }
+        }
+
+        // Expor função de reset no console para debug
+        window.resetCentralData = resetData;
+
+        // Sistema de Tradução com Google Tradutor
+        class GoogleTranslator {
+            constructor() {
+                this.cache = new Map();
+                this.isTranslating = false;
+                this.fallbackTranslations = {
+                    // Backup para casos offline
+                    'olá': 'hello',
+                    'oi': 'hi',
+                    'bom dia': 'good morning',
+                    'boa tarde': 'good afternoon',
+                    'boa noite': 'good evening',
+                    'tchau': 'bye',
+                    'obrigado': 'thank you',
+                    'obrigada': 'thank you',
+                    'por favor': 'please',
+                    'desculpa': 'sorry',
+                    'sim': 'yes',
+                    'não': 'no',
+                    'como você está?': 'how are you?',
+                    'tudo bem?': 'how are you?',
+                    'eu te amo': 'i love you',
+                    'até logo': 'see you later',
+                    'qual é o seu nome?': 'what is your name?',
+                    'onde você mora?': 'where do you live?',
+                    'que horas são?': 'what time is it?',
+                    'quanto custa?': 'how much does it cost?',
+                    'você fala inglês?': 'do you speak english?',
+                    'eu não entendo': 'i don\'t understand',
+                    'pode repetir?': 'can you repeat?',
+                    'com certeza': 'certainly',
+                    'talvez': 'maybe',
+                    'claro': 'of course',
+                    'de nada': 'you\'re welcome',
+                    'tenha um bom dia': 'have a good day'
+                };
+            }
+            
+            async translate(text) {
+                if (this.isTranslating) return null;
                 
-                if (exists) {
-                    showNotification('Este site já está sendo monitorado!', 'error');
-                    return;
+                const cleanText = text.trim();
+                if (!cleanText) return '';
+                
+                // Verificar cache primeiro
+                if (this.cache.has(cleanText.toLowerCase())) {
+                    return this.cache.get(cleanText.toLowerCase());
                 }
                 
-                addSite(name, url);
+                this.isTranslating = true;
                 
-                // Limpar formulário
-                document.getElementById('siteNameInput').value = '';
-                document.getElementById('siteUrlInput').value = '';
+                try {
+                    // Tentar Google Tradutor via API pública
+                    const translation = await this.translateWithGoogle(cleanText);
+                    
+                    if (translation && translation !== cleanText) {
+                        this.cache.set(cleanText.toLowerCase(), translation);
+                        this.isTranslating = false;
+                        return translation;
+                    }
+                } catch (error) {
+                    console.warn('Google Tradutor indisponível, usando fallback:', error);
+                }
+                
+                // Fallback para traduções básicas
+                const fallback = this.fallbackTranslations[cleanText.toLowerCase()];
+                if (fallback) {
+                    this.cache.set(cleanText.toLowerCase(), fallback);
+                    this.isTranslating = false;
+                    return fallback;
+                }
+                
+                // Último recurso: tradução palavra por palavra
+                const wordTranslation = this.translateWords(cleanText);
+                this.cache.set(cleanText.toLowerCase(), wordTranslation);
+                this.isTranslating = false;
+                return wordTranslation;
             }
-        });
-
-        document.getElementById('checkAllSitesBtn').addEventListener('click', checkAllSites);
-
-        // Botão de áudio (funcional)
-        let audioEnabled = true;
-        document.getElementById('audioToggleBtn').addEventListener('click', function() {
-            audioEnabled = !audioEnabled;
-            const icon = document.getElementById('audioIcon');
             
-            if (audioEnabled) {
-                icon.className = 'fas fa-volume-up';
-                this.classList.remove('bg-red-800');
-                this.classList.add('bg-purple-800');
-                showNotification('Áudio ativado', 'success');
-            } else {
-                icon.className = 'fas fa-volume-mute';
-                this.classList.remove('bg-purple-800');
-                this.classList.add('bg-red-800');
-                showNotification('Áudio desativado', 'info');
+            async translateWithGoogle(text) {
+                try {
+                    // Usar Google Translate via API pública
+                    const encodedText = encodeURIComponent(text);
+                    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=pt&tl=en&dt=t&q=${encodedText}`;
+                    
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data && data[0] && data[0][0] && data[0][0][0]) {
+                        return data[0][0][0];
+                    }
+                    
+                    throw new Error('Resposta inválida da API');
+                    
+                } catch (error) {
+                    console.warn('Erro na API do Google:', error);
+                    return null;
+                }
             }
+            
+            translateWords(text) {
+                const words = text.toLowerCase().split(' ');
+                const translatedWords = words.map(word => {
+                    const cleanWord = word.replace(/[.,!?;:]/g, '');
+                    return this.fallbackTranslations[cleanWord] || word;
+                });
+                
+                return translatedWords.join(' ');
+            }
+            
+            // Detectar idioma do texto
+            detectLanguage(text) {
+                const portugueseWords = ['o', 'a', 'de', 'que', 'e', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais', 'as', 'dos', 'como', 'mas', 'foi', 'ao', 'ele', 'das', 'tem', 'à', 'seu', 'sua', 'ou', 'ser', 'quando', 'muito', 'há', 'nos', 'já', 'está', 'eu', 'também', 'só', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'era', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'suas', 'numa', 'pelos', 'pelas', 'esse', 'eles', 'essa', 'num', 'nem', 'suas', 'meu', 'às', 'minha', 'têm', 'numa', 'pelos', 'pelas', 'seu', 'sua'];
+                
+                const words = text.toLowerCase().split(' ');
+                let portugueseCount = 0;
+                
+                words.forEach(word => {
+                    if (portugueseWords.includes(word.replace(/[.,!?;:]/g, ''))) {
+                        portugueseCount++;
+                    }
+                });
+                
+                return portugueseCount > words.length * 0.3 ? 'pt' : 'en';
+            }
+        }
+        
+        // Inicializar tradutor
+        const translator = new GoogleTranslator();
+        let isTranslatorVisible = true;
+        
+        // Controles do tradutor
+        function toggleTranslatorVisibility() {
+            const chat = document.getElementById('translatorChat');
+            const showBtn = document.getElementById('showTranslator');
+            const header = document.querySelector('header');
+            const editorPanel = document.getElementById('editorPanel');
+            const mainContent = document.querySelector('.p-4.pl-96');
+            
+            isTranslatorVisible = !isTranslatorVisible;
+            
+            if (isTranslatorVisible) {
+                chat.classList.remove('hidden');
+                showBtn.classList.add('hidden');
+                header.classList.remove('ml-4');
+                header.classList.add('ml-96');
+                editorPanel.classList.remove('ml-4');
+                editorPanel.classList.add('ml-96');
+                mainContent.classList.remove('pl-4');
+                mainContent.classList.add('pl-96');
+            } else {
+                chat.classList.add('hidden');
+                showBtn.classList.remove('hidden');
+                header.classList.remove('ml-96');
+                header.classList.add('ml-4');
+                editorPanel.classList.remove('ml-96');
+                editorPanel.classList.add('ml-4');
+                mainContent.classList.remove('pl-96');
+                mainContent.classList.add('pl-4');
+            }
+        }
+        
+        // Minimizar/maximizar tradutor
+        document.getElementById('toggleTranslator').addEventListener('click', function() {
+            toggleTranslatorVisibility();
         });
-
-        // Botão de editor (funcional)
-        document.getElementById('editBtn').addEventListener('click', function() {
-            const editorModal = document.createElement('div');
-            editorModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
-            editorModal.innerHTML = `
-                <div class="bg-black border border-gray-800 rounded-2xl p-6 max-w-4xl w-full max-h-[80vh] overflow-hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-4">
-                                <i class="fas fa-edit text-white"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-2xl font-bold text-white">Editor de Código</h2>
-                                <p class="text-gray-400 text-sm">Editor integrado para desenvolvimento</p>
-                            </div>
-                        </div>
-                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white transition-colors">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
+        
+        // Adicionar mensagem ao chat
+        function addChatMessage(text, translation, isUser = true, isGoogleTranslate = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Remover mensagem de boas-vindas se existir
+            const welcomeMsg = chatMessages.querySelector('.text-center.text-gray-400');
+            if (welcomeMsg) {
+                welcomeMsg.remove();
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            if (isUser) {
+                messageDiv.innerHTML = `
+                    <div class="bg-purple-600/30 p-3 rounded-lg rounded-br-none ml-8">
+                        <div class="text-white text-sm">${text}</div>
+                        <div class="text-xs text-purple-200 mt-1">🇧🇷 Português</div>
                     </div>
-                    
-                    <div class="bg-black/30 border border-gray-700 rounded-lg overflow-hidden">
-                        <div class="bg-gray-800 px-4 py-2 border-b border-gray-700">
-                            <div class="flex items-center gap-2">
-                                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-                                <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                                <span class="ml-4 text-gray-300 text-sm font-mono">script.js</span>
-                            </div>
+                `;
+            } else {
+                const sourceIndicator = isGoogleTranslate ? '🌐 Google Tradutor' : '🤖 IA Local';
+                messageDiv.innerHTML = `
+                    <div class="bg-blue-600/30 p-3 rounded-lg rounded-bl-none mr-8">
+                        <div class="text-white text-sm">${translation}</div>
+                        <div class="text-xs text-blue-200 mt-1 flex justify-between items-center">
+                            <span>🇺🇸 English • ${sourceIndicator}</span>
+                            <button onclick="copyTranslation('${translation}')" class="text-blue-300 hover:text-blue-100 transition-colors" onmouseenter="techSound.play('hover')" onclick="techSound.play('beep')">
+                                📋
+                            </button>
                         </div>
-                        <textarea 
-                            class="w-full h-96 p-4 bg-black text-green-400 font-mono text-sm resize-none focus:outline-none"
-                            placeholder="// Digite seu código aqui...
-console.log('Editor ARIA ativo!');
-
-function exemploFuncao() {
-    return 'Sistema funcionando perfeitamente!';
-}"
-                        ></textarea>
                     </div>
-                    
-                    <div class="flex justify-end gap-4 mt-6">
-                        <button 
-                            onclick="this.closest('.fixed').remove()"
-                            class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all duration-200"
-                        >
-                            Fechar
-                        </button>
-                        <button 
-                            onclick="showNotification('Código salvo com sucesso!', 'success')"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200"
-                        >
-                            <i class="fas fa-save mr-2"></i>
-                            Salvar
-                        </button>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Copiar tradução
+        function copyTranslation(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const indicator = document.createElement('div');
+                indicator.className = 'fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+                indicator.innerHTML = '📋 Tradução copiada!';
+                document.body.appendChild(indicator);
+                
+                setTimeout(() => {
+                    indicator.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(indicator);
+                    }, 300);
+                }, 2000);
+            });
+        }
+        
+        // Limpar chat
+        function clearTranslatorChat() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="text-center text-gray-400 text-sm py-8">
+                    <div class="mb-2">🌐 Google Tradutor Ativo</div>
+                    <div>Digite em português para traduzir</div>
+                    <div class="text-xs mt-2 text-green-400">✓ Traduções precisas e naturais</div>
+                </div>
+            `;
+        }
+        
+        // Processar tradução
+        document.getElementById('translatorForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const input = document.getElementById('translatorInput');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            // Tocar som de processamento
+            techSound.play('beep');
+            
+            // Adicionar mensagem do usuário
+            addChatMessage(text, '', true);
+            
+            // Limpar input
+            input.value = '';
+            
+            // Mostrar indicador de carregamento com Google Tradutor
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message bot-message loading';
+            loadingDiv.innerHTML = `
+                <div class="bg-blue-600/30 p-3 rounded-lg rounded-bl-none mr-8">
+                    <div class="text-blue-300 text-sm flex items-center space-x-2">
+                        <div class="animate-spin w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full"></div>
+                        <span>🌐 Google Tradutor processando...</span>
                     </div>
                 </div>
             `;
             
-            document.body.appendChild(editorModal);
-        });
-
-        // Event listener para o botão do banco de dados
-        document.getElementById('databaseBtn').addEventListener('click', showDatabaseModal);
-
-        // Botão de logout
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            adminPanel.classList.add('hidden');
-            loginScreen.classList.remove('hidden');
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
             
-            // Reset do sistema de login
-            loginAttempts = 0;
-            updateAttemptCounter();
-            passwordInput.value = '';
-            passwordInput.disabled = false;
-            loginButton.disabled = false;
-            loginButton.classList.remove('loading');
-            loginButton.querySelector('.button-text').textContent = 'ENTRAR';
-            errorMessage.classList.add('hidden');
-            welcomeMessage.classList.add('hidden');
-        });
-
-        // Inicializar sistema
-        updateAttemptCounter();
-        
-        // Renderizar sites iniciais quando o painel for carregado
-        setTimeout(() => {
-            if (!adminPanel.classList.contains('hidden')) {
-                renderSites();
-                // Verificar status inicial dos sites
-                setTimeout(checkAllSites, 1000);
+            try {
+                // Usar Google Tradutor
+                const translation = await translator.translate(text);
+                
+                // Remover indicador de carregamento
+                loadingDiv.remove();
+                
+                // Verificar se foi traduzido pelo Google ou fallback
+                const isGoogleTranslate = !translator.fallbackTranslations[text.toLowerCase()];
+                
+                // Adicionar tradução com indicador de fonte
+                addChatMessage('', translation, false, isGoogleTranslate);
+                
+                // Tocar som de sucesso
+                techSound.play('success');
+                
+            } catch (error) {
+                console.error('Erro na tradução:', error);
+                
+                // Remover indicador de carregamento
+                loadingDiv.remove();
+                
+                // Mostrar erro
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'message bot-message';
+                errorDiv.innerHTML = `
+                    <div class="bg-red-600/30 p-3 rounded-lg rounded-bl-none mr-8">
+                        <div class="text-red-300 text-sm">❌ Erro na tradução. Tente novamente.</div>
+                    </div>
+                `;
+                chatMessages.appendChild(errorDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                techSound.play('error');
             }
-        }, 100);
+        });
+        
+        // Expor funções globalmente
+        window.toggleTranslatorVisibility = toggleTranslatorVisibility;
+        window.copyTranslation = copyTranslation;
+        window.clearTranslatorChat = clearTranslatorChat;
+
+        // Inicializar aplicação
+        initializeApp();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9833e4f782c0f614',t:'MTc1ODU2NjA0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    </div> <!-- Fim da aplicação principal -->
+
+    <script>
+        // Sistema de autenticação com hash criptográfico
+        const AUTH_STORAGE_KEY = 'central_controle_auth';
+        
+        // Senha correta: Vic20142015@
+        const CORRECT_PASSWORD = 'Vic20142015@';
+        
+        // Função para gerar hash SHA-256 real
+        async function generateHash(text) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        
+        // Verificar se já está autenticado
+        function checkAuth() {
+            try {
+                const authData = localStorage.getItem(AUTH_STORAGE_KEY);
+                if (authData) {
+                    const parsed = JSON.parse(authData);
+                    const now = Date.now();
+                    // Sessão válida por 24 horas
+                    if (parsed.timestamp && (now - parsed.timestamp) < 24 * 60 * 60 * 1000) {
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao verificar autenticação:', error);
+            }
+            return false;
+        }
+        
+        // Salvar autenticação
+        function saveAuth() {
+            try {
+                const authData = {
+                    authenticated: true,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authData));
+            } catch (error) {
+                console.error('Erro ao salvar autenticação:', error);
+            }
+        }
+        
+        // Mostrar aplicação principal
+        function showMainApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            // Inicializar aplicação principal
+            if (typeof initializeApp === 'function') {
+                initializeApp();
+            }
+        }
+        
+        // Mostrar erro de login
+        function showLoginError() {
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.classList.remove('hidden');
+            
+            // Limpar campo de senha
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordInput').focus();
+            
+            // Ocultar erro após 3 segundos
+            setTimeout(() => {
+                errorDiv.classList.add('hidden');
+            }, 3000);
+        }
+        
+        // Toggle de visibilidade da senha
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('passwordInput');
+            const isPassword = passwordInput.type === 'password';
+            
+            passwordInput.type = isPassword ? 'text' : 'password';
+            this.textContent = isPassword ? '🙈' : '👁️';
+        });
+        
+        // Processar login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('passwordInput').value.trim();
+            
+            if (!password) {
+                showLoginError();
+                return;
+            }
+            
+            // Verificação direta da senha
+            if (password === 'Vic20142015@') {
+                // Login bem-sucedido
+                saveAuth();
+                techSound.play('login');
+                
+                // Animação de sucesso
+                const button = this.querySelector('button[type="submit"]');
+                button.innerHTML = '✅ ACESSO LIBERADO';
+                button.classList.remove('from-blue-600', 'to-purple-600');
+                button.classList.add('bg-green-600');
+                
+                setTimeout(() => {
+                    showMainApp();
+                }, 1000);
+            } else {
+                techSound.play('error');
+                showLoginError();
+            }
+        });
+        
+        // Verificar autenticação ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAuth()) {
+                showMainApp();
+            } else {
+                // Focar no campo de senha
+                document.getElementById('passwordInput').focus();
+            }
+        });
+        
+        // Função de logout (pode ser chamada de qualquer lugar)
+        function logout() {
+            localStorage.removeItem(AUTH_STORAGE_KEY);
+            location.reload();
+        }
+        
+        // Expor função de logout globalmente
+        window.logout = logout;
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9864b650a36bf612',t:'MTc1OTA3NzkzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
