@@ -390,8 +390,78 @@
             </div>
         </button>
 
+        <!-- Chat de Notícias de IA -->
+        <div id="aiNewsChat" class="fixed right-6 top-6 bottom-6 w-96 glass-effect-strong rounded-2xl z-40 flex flex-col transition-all duration-300 transform">
+            <!-- Header do Chat de Notícias -->
+            <div class="flex justify-between items-center p-6 border-b border-blue-500/40">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl flex items-center justify-center relative">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L13.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" stroke="white" stroke-width="2" fill="rgba(255,255,255,0.1)"/>
+                        </svg>
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full pulse-glow"></div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-blue-300 text-lg">IA NEWS FEED</h3>
+                        <p class="text-xs text-gray-400">Últimas novidades em IA</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-1 text-xs">
+                        <div class="w-2 h-2 bg-green-400 rounded-full pulse-glow"></div>
+                        <span class="text-green-400">LIVE</span>
+                    </div>
+                    <button id="toggleAiNews" class="text-gray-400 hover:text-white transition-all duration-300 p-2 rounded-lg hover:bg-white/10" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Área de Notícias -->
+            <div id="aiNewsMessages" class="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
+                <div class="text-center text-gray-400 text-sm py-4">
+                    <div class="animate-spin w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full mx-auto mb-2"></div>
+                    <div>🤖 Carregando últimas notícias de IA...</div>
+                </div>
+            </div>
+            
+            <!-- Controles do Feed -->
+            <div class="p-6 border-t border-blue-500/40">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-xs text-gray-400">
+                        <span>Última atualização: <span id="lastUpdate">Carregando...</span></span>
+                    </div>
+                    <button id="refreshNews" class="modern-button px-3 py-2 rounded-lg text-xs" onclick="refreshAINews()" onmouseenter="techSound.play('hover')" onclick="techSound.play('beep')">
+                        🔄 Atualizar
+                    </button>
+                </div>
+                <div class="flex justify-between items-center text-xs text-gray-400">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                        <span>Auto-refresh: 5min</span>
+                    </div>
+                    <button id="clearAiNews" class="hover:text-white transition-colors flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-white/10" onclick="clearAINews()" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 6H5H21M8 6V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V6M19 6V20C19 20.5523 18.5523 21 18 21H6C5.44772 21 5 20.5523 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Limpar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão para mostrar/ocultar chat de notícias (quando minimizado) -->
+        <button id="showAiNews" class="hidden fixed right-4 top-4 glass-effect p-3 rounded-xl z-40 hover:scale-105 transition-all duration-300" onclick="toggleAiNewsVisibility()" onmouseenter="techSound.play('hover')" onclick="techSound.play('beep')">
+            <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 bg-red-500 rounded-full pulse-glow"></div>
+                <span class="text-blue-300 font-bold text-sm">🤖</span>
+            </div>
+        </button>
+
         <!-- Header -->
-    <header class="glass-effect p-8 m-6 ml-96 rounded-2xl relative z-10">
+    <header class="glass-effect p-8 m-6 ml-96 mr-96 rounded-2xl relative z-10">
         <div class="flex justify-between items-center">
             <div class="flex items-center space-x-4">
                 <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -430,7 +500,7 @@
     </header>
 
     <!-- Painel de Edição -->
-    <div id="editorPanel" class="hidden glass-effect p-8 m-6 ml-96 rounded-2xl relative z-10">
+    <div id="editorPanel" class="hidden glass-effect p-8 m-6 ml-96 mr-96 rounded-2xl relative z-10">
         <div class="flex justify-between items-center mb-8">
             <div class="flex items-center space-x-4">
                 <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl flex items-center justify-center">
@@ -467,7 +537,7 @@
         </div>
     </div>
 
-    <div class="p-6 pl-96">
+    <div class="p-6 pl-96 pr-96">
         <!-- Perfis e Ferramentas -->
         <div class="glass-effect p-8 rounded-2xl max-w-6xl mx-auto relative z-10">
             <div class="text-center mb-10">
@@ -1601,6 +1671,412 @@
         window.copyTranslation = copyTranslation;
         window.clearTranslatorChat = clearTranslatorChat;
 
+        // Sistema de Notícias de IA
+        class AINewsSystem {
+            constructor() {
+                this.newsCache = [];
+                this.lastUpdate = null;
+                this.isVisible = true;
+                this.updateInterval = null;
+                this.sources = [
+                    'OpenAI', 'Google DeepMind', 'Anthropic', 'Meta AI', 'Microsoft', 
+                    'Runway ML', 'Midjourney', 'Stability AI', 'Hugging Face', 'Replicate'
+                ];
+                this.aiTools = [
+                    'ChatGPT', 'Claude', 'Gemini', 'GPT-4', 'DALL-E', 'Midjourney', 
+                    'Runway ML', 'Stable Diffusion', 'Whisper', 'Codex', 'GitHub Copilot',
+                    'Sora', 'Udio', 'ElevenLabs', 'Synthesia', 'Luma AI', 'Pika Labs',
+                    'Leonardo AI', 'Firefly', 'Bard', 'LaMDA', 'PaLM', 'Imagen',
+                    'Make-A-Video', 'Phenaki', 'Parti', 'Flamingo', 'Gato', 'Chinchilla'
+                ];
+                this.init();
+            }
+            
+            init() {
+                this.generateInitialNews();
+                this.startAutoRefresh();
+                console.log('🤖 Sistema de Notícias de IA inicializado');
+            }
+            
+            generateInitialNews() {
+                const initialNews = [
+                    {
+                        id: 1,
+                        title: "🚀 Runway ML Gen-3 Alpha Lançado",
+                        description: "Nova versão com qualidade de vídeo 4K e controles avançados",
+                        url: "https://runwayml.com/research/gen-3-alpha",
+                        source: "Runway ML",
+                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 horas atrás
+                        category: "Vídeo IA",
+                        isNew: true
+                    },
+                    {
+                        id: 2,
+                        title: "🎨 Google Imagen 3 Disponível",
+                        description: "Geração de imagens com qualidade fotorrealística melhorada",
+                        url: "https://deepmind.google/technologies/imagen-3/",
+                        source: "Google DeepMind",
+                        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 horas atrás
+                        category: "Imagem IA",
+                        isNew: true
+                    },
+                    {
+                        id: 3,
+                        title: "🧠 OpenAI GPT-4 Turbo Atualizado",
+                        description: "Melhor performance e redução de custos em 50%",
+                        url: "https://openai.com/gpt-4",
+                        source: "OpenAI",
+                        timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 horas atrás
+                        category: "LLM",
+                        isNew: false
+                    },
+                    {
+                        id: 4,
+                        title: "🎵 Udio v2 com Controles Avançados",
+                        description: "Nova versão permite edição de letras e estilos musicais",
+                        url: "https://udio.com",
+                        source: "Udio",
+                        timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000), // 8 horas atrás
+                        category: "Áudio IA",
+                        isNew: false
+                    },
+                    {
+                        id: 5,
+                        title: "🎬 Luma AI Dream Machine Beta",
+                        description: "Geração de vídeos a partir de texto com física realística",
+                        url: "https://lumalabs.ai/dream-machine",
+                        source: "Luma AI",
+                        timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 horas atrás
+                        category: "Vídeo IA",
+                        isNew: false
+                    }
+                ];
+                
+                this.newsCache = initialNews;
+                this.renderNews();
+                this.updateTimestamp();
+            }
+            
+            generateRandomNews() {
+                const newsTypes = [
+                    {
+                        type: "launch",
+                        templates: [
+                            "🚀 {tool} {version} Lançado",
+                            "✨ Nova versão do {tool} disponível",
+                            "🎉 {source} anuncia {tool} {version}"
+                        ],
+                        descriptions: [
+                            "Nova versão com melhorias significativas de performance",
+                            "Recursos avançados e interface redesenhada",
+                            "Qualidade aprimorada e novos controles",
+                            "Integração com APIs e ferramentas populares",
+                            "Redução de custos e maior velocidade"
+                        ]
+                    },
+                    {
+                        type: "update",
+                        templates: [
+                            "🔄 {tool} recebe atualização importante",
+                            "⚡ {tool} melhora performance",
+                            "🛠️ {source} atualiza {tool}"
+                        ],
+                        descriptions: [
+                            "Correções de bugs e melhorias de estabilidade",
+                            "Novos recursos experimentais disponíveis",
+                            "Otimizações para melhor experiência do usuário",
+                            "Suporte a novos formatos e resoluções",
+                            "Integração aprimorada com outras ferramentas"
+                        ]
+                    },
+                    {
+                        type: "research",
+                        templates: [
+                            "🧪 {source} publica pesquisa sobre {tool}",
+                            "📊 Novo estudo revela avanços em {tool}",
+                            "🔬 Breakthrough em {category} pela {source}"
+                        ],
+                        descriptions: [
+                            "Resultados impressionantes em benchmarks",
+                            "Nova arquitetura supera modelos anteriores",
+                            "Eficiência energética melhorada em 40%",
+                            "Capacidades multimodais expandidas",
+                            "Redução significativa de alucinações"
+                        ]
+                    }
+                ];
+                
+                const categories = ["LLM", "Imagem IA", "Vídeo IA", "Áudio IA", "Código IA", "3D IA"];
+                const versions = ["v2.0", "v3.1", "Pro", "Ultra", "Turbo", "Alpha", "Beta"];
+                
+                const newsType = newsTypes[Math.floor(Math.random() * newsTypes.length)];
+                const template = newsType.templates[Math.floor(Math.random() * newsType.templates.length)];
+                const description = newsType.descriptions[Math.floor(Math.random() * newsType.descriptions.length)];
+                const source = this.sources[Math.floor(Math.random() * this.sources.length)];
+                const tool = this.aiTools[Math.floor(Math.random() * this.aiTools.length)];
+                const version = versions[Math.floor(Math.random() * versions.length)];
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                
+                const title = template
+                    .replace('{tool}', tool)
+                    .replace('{version}', version)
+                    .replace('{source}', source)
+                    .replace('{category}', category);
+                
+                return {
+                    id: Date.now() + Math.random(),
+                    title: title,
+                    description: description,
+                    url: this.generateRealisticUrl(source, tool),
+                    source: source,
+                    timestamp: new Date(),
+                    category: category,
+                    isNew: true
+                };
+            }
+            
+            generateRealisticUrl(source, tool) {
+                const urlMappings = {
+                    'OpenAI': 'https://openai.com',
+                    'Google DeepMind': 'https://deepmind.google',
+                    'Anthropic': 'https://anthropic.com',
+                    'Meta AI': 'https://ai.meta.com',
+                    'Microsoft': 'https://microsoft.com/ai',
+                    'Runway ML': 'https://runwayml.com',
+                    'Midjourney': 'https://midjourney.com',
+                    'Stability AI': 'https://stability.ai',
+                    'Hugging Face': 'https://huggingface.co',
+                    'Replicate': 'https://replicate.com'
+                };
+                
+                const baseUrl = urlMappings[source] || 'https://example.com';
+                const toolSlug = tool.toLowerCase().replace(/\s+/g, '-');
+                
+                return `${baseUrl}/${toolSlug}`;
+            }
+            
+            addNews(news) {
+                // Marcar notícias antigas como não novas
+                this.newsCache.forEach(item => item.isNew = false);
+                
+                // Adicionar nova notícia no topo
+                this.newsCache.unshift(news);
+                
+                // Manter apenas as 20 notícias mais recentes
+                if (this.newsCache.length > 20) {
+                    this.newsCache = this.newsCache.slice(0, 20);
+                }
+                
+                this.renderNews();
+                this.updateTimestamp();
+                
+                // Tocar som de notificação
+                techSound.play('notification');
+                
+                // Mostrar indicador de nova notícia
+                this.showNewNewsIndicator(news);
+            }
+            
+            showNewNewsIndicator(news) {
+                const indicator = document.createElement('div');
+                indicator.className = 'fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300 max-w-sm';
+                indicator.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-red-500 rounded-full pulse-glow"></div>
+                        <div>
+                            <div class="font-bold text-sm">🤖 Nova IA!</div>
+                            <div class="text-xs opacity-90">${news.title}</div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(indicator);
+                
+                setTimeout(() => {
+                    indicator.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(indicator);
+                    }, 300);
+                }, 4000);
+            }
+            
+            renderNews() {
+                const container = document.getElementById('aiNewsMessages');
+                container.innerHTML = '';
+                
+                if (this.newsCache.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center text-gray-400 text-sm py-8">
+                            <div class="mb-2">🤖 Nenhuma notícia disponível</div>
+                            <div>Clique em "Atualizar" para buscar novidades</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.newsCache.forEach(news => {
+                    const newsDiv = document.createElement('div');
+                    newsDiv.className = `news-item bg-slate-800/50 p-4 rounded-xl hover:bg-slate-700/50 transition-all duration-300 cursor-pointer border-l-4 ${news.isNew ? 'border-red-500 bg-red-900/20' : 'border-blue-500/50'}`;
+                    
+                    const timeAgo = this.getTimeAgo(news.timestamp);
+                    const categoryColor = this.getCategoryColor(news.category);
+                    
+                    newsDiv.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center space-x-2">
+                                ${news.isNew ? '<div class="w-2 h-2 bg-red-500 rounded-full pulse-glow"></div>' : ''}
+                                <span class="text-xs px-2 py-1 rounded-full ${categoryColor}">${news.category}</span>
+                            </div>
+                            <span class="text-xs text-gray-400">${timeAgo}</span>
+                        </div>
+                        <h4 class="text-white font-bold text-sm mb-2 leading-tight">${news.title}</h4>
+                        <p class="text-gray-300 text-xs mb-3 leading-relaxed">${news.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-blue-400 font-medium">${news.source}</span>
+                            <button onclick="openNewsLink('${news.url}')" class="text-xs text-purple-400 hover:text-purple-300 transition-colors flex items-center space-x-1" onmouseenter="techSound.play('hover')" onclick="techSound.play('beep')">
+                                <span>Abrir</span>
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 13V19C18 19.5523 17.5523 20 17 20H5C4.44772 20 4 19.5523 4 19V7C4 6.44772 4.44772 6 5 6H11M15 3H21V9M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    `;
+                    
+                    container.appendChild(newsDiv);
+                });
+                
+                container.scrollTop = 0;
+            }
+            
+            getCategoryColor(category) {
+                const colors = {
+                    'LLM': 'bg-purple-600/30 text-purple-300',
+                    'Imagem IA': 'bg-pink-600/30 text-pink-300',
+                    'Vídeo IA': 'bg-red-600/30 text-red-300',
+                    'Áudio IA': 'bg-green-600/30 text-green-300',
+                    'Código IA': 'bg-blue-600/30 text-blue-300',
+                    '3D IA': 'bg-yellow-600/30 text-yellow-300'
+                };
+                return colors[category] || 'bg-gray-600/30 text-gray-300';
+            }
+            
+            getTimeAgo(timestamp) {
+                const now = new Date();
+                const diff = now - timestamp;
+                const minutes = Math.floor(diff / 60000);
+                const hours = Math.floor(diff / 3600000);
+                const days = Math.floor(diff / 86400000);
+                
+                if (minutes < 1) return 'Agora';
+                if (minutes < 60) return `${minutes}min`;
+                if (hours < 24) return `${hours}h`;
+                return `${days}d`;
+            }
+            
+            updateTimestamp() {
+                this.lastUpdate = new Date();
+                const timeString = this.lastUpdate.toLocaleTimeString('pt-BR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                document.getElementById('lastUpdate').textContent = timeString;
+            }
+            
+            refresh() {
+                // Simular busca de novas notícias
+                const shouldAddNews = Math.random() > 0.3; // 70% chance de ter notícia nova
+                
+                if (shouldAddNews) {
+                    const newNews = this.generateRandomNews();
+                    this.addNews(newNews);
+                } else {
+                    this.updateTimestamp();
+                    
+                    // Mostrar feedback de atualização
+                    const indicator = document.createElement('div');
+                    indicator.className = 'fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+                    indicator.innerHTML = '🔄 Feed atualizado - Nenhuma novidade';
+                    document.body.appendChild(indicator);
+                    
+                    setTimeout(() => {
+                        indicator.style.opacity = '0';
+                        setTimeout(() => {
+                            document.body.removeChild(indicator);
+                        }, 300);
+                    }, 2000);
+                }
+            }
+            
+            clear() {
+                this.newsCache = [];
+                this.renderNews();
+            }
+            
+            startAutoRefresh() {
+                // Auto-refresh a cada 5 minutos
+                this.updateInterval = setInterval(() => {
+                    if (this.isVisible) {
+                        this.refresh();
+                    }
+                }, 5 * 60 * 1000);
+            }
+            
+            stopAutoRefresh() {
+                if (this.updateInterval) {
+                    clearInterval(this.updateInterval);
+                    this.updateInterval = null;
+                }
+            }
+            
+            toggleVisibility() {
+                this.isVisible = !this.isVisible;
+                const chat = document.getElementById('aiNewsChat');
+                const showBtn = document.getElementById('showAiNews');
+                
+                if (this.isVisible) {
+                    chat.classList.remove('hidden');
+                    showBtn.classList.add('hidden');
+                } else {
+                    chat.classList.add('hidden');
+                    showBtn.classList.remove('hidden');
+                }
+                
+                return this.isVisible;
+            }
+        }
+        
+        // Inicializar sistema de notícias
+        const aiNews = new AINewsSystem();
+        
+        // Funções globais para o sistema de notícias
+        function refreshAINews() {
+            aiNews.refresh();
+        }
+        
+        function clearAINews() {
+            if (confirm('Limpar todas as notícias?')) {
+                aiNews.clear();
+            }
+        }
+        
+        function toggleAiNewsVisibility() {
+            aiNews.toggleVisibility();
+        }
+        
+        function openNewsLink(url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+        
+        // Controles do chat de notícias
+        document.getElementById('toggleAiNews').addEventListener('click', function() {
+            toggleAiNewsVisibility();
+        });
+        
+        // Expor funções globalmente
+        window.refreshAINews = refreshAINews;
+        window.clearAINews = clearAINews;
+        window.toggleAiNewsVisibility = toggleAiNewsVisibility;
+        window.openNewsLink = openNewsLink;
+
         // Inicializar aplicação
         initializeApp();
     </script>
@@ -1739,5 +2215,5 @@
         // Expor função de logout globalmente
         window.logout = logout;
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9864b650a36bf612',t:'MTc1OTA3NzkzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'986505f0b633f630',t:'MTc1OTA4MTE5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
