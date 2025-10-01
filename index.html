@@ -202,6 +202,8 @@
                 0 0 0 1px rgba(139, 92, 246, 0.2);
         }
         
+
+        
         .neon-text {
             text-shadow: 
                 0 0 5px rgba(139, 92, 246, 0.8),
@@ -460,44 +462,46 @@
             </div>
         </button>
 
+
+
         <!-- Header -->
-    <header class="glass-effect p-8 m-6 ml-96 mr-96 rounded-2xl relative z-10">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <h1 class="text-4xl font-bold neon-text tracking-tight">CENTRAL DE CONTROLE</h1>
-            </div>
-            <div class="flex items-center space-x-8">
-                <nav class="flex items-center space-x-2">
-                    <button onclick="showEmailDatabase()" class="modern-button text-purple-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
-                        🗄️ Banco de Dados
-                    </button>
-                    <button id="editorToggle" class="modern-button text-blue-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')" onclick="techSound.play('click')">
-                        ✏️ Editor
-                    </button>
-                    <button id="audioToggle" class="modern-button text-green-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')" onclick="toggleAudio()">
-                        🔊 Som
-                    </button>
-                    <button onclick="logout()" class="bg-gradient-to-r from-red-500/80 to-red-600/80 hover:from-red-500 hover:to-red-600 text-red-100 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border border-red-500/40" onmouseenter="techSound.play('hover')" onclick="techSound.play('logout'); setTimeout(logout, 400);">
-                        🚪 Encerrar
-                    </button>
-                </nav>
-                <div class="flex items-center space-x-4 border-l border-purple-500/40 pl-8">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-3 h-3 bg-green-400 rounded-full pulse-glow"></div>
-                        <span class="text-green-400 font-medium text-sm">SISTEMA ONLINE</span>
+        <header class="p-6 pl-96 pr-96">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                    <div class="text-blue-400 font-mono text-sm bg-slate-800/50 px-3 py-1 rounded-lg">23:47:12</div>
+                    <h1 class="text-4xl font-bold neon-text tracking-tight">CENTRAL DE CONTROLE</h1>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <nav class="flex items-center space-x-2">
+                        <button onclick="showEmailDatabase(); techSound.play('click');" class="modern-button text-purple-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')">
+                            🗄️ Banco de Dados
+                        </button>
+                        <button id="editorToggle" class="modern-button text-blue-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')">
+                            ✏️ Editor
+                        </button>
+                        <button id="audioToggle" class="modern-button text-green-100 px-4 py-2 rounded-xl text-sm font-medium" onmouseenter="techSound.play('hover')">
+                            🔊 Som
+                        </button>
+                        <button onclick="techSound.play('logout'); setTimeout(logout, 400);" class="bg-gradient-to-r from-red-500/80 to-red-600/80 hover:from-red-500 hover:to-red-600 text-red-100 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border border-red-500/40" onmouseenter="techSound.play('hover')">
+                            🚪 Encerrar
+                        </button>
+                    </nav>
+                    <div class="flex items-center space-x-4 border-l border-purple-500/40 pl-8">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-green-400 rounded-full pulse-glow"></div>
+                            <span class="text-green-400 font-medium text-sm">SISTEMA ONLINE</span>
+                        </div>
+                        <div class="text-blue-400 font-mono text-sm bg-slate-800/50 px-3 py-1 rounded-lg">23:47:12</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
     <!-- Painel de Edição -->
     <div id="editorPanel" class="hidden glass-effect p-8 m-6 ml-96 mr-96 rounded-2xl relative z-10">
@@ -969,8 +973,17 @@
             }
         }
 
+        // Adicionar evento de clique ao botão de áudio
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioButton = document.getElementById('audioToggle');
+            if (audioButton) {
+                audioButton.addEventListener('click', toggleAudio);
+            }
+        });
+
         // Toggle do modo editor
         document.getElementById('editorToggle').addEventListener('click', function() {
+            techSound.play('click');
             isEditorMode = !isEditorMode;
             const editorPanel = document.getElementById('editorPanel');
             const editControls = document.querySelectorAll('.edit-controls');
@@ -978,12 +991,12 @@
             if (isEditorMode) {
                 editorPanel.classList.remove('hidden');
                 editControls.forEach(control => control.classList.remove('hidden'));
-                this.textContent = '👁️ Visualizar';
+                this.innerHTML = '👁️ Visualizar';
                 this.classList.add('bg-green-600/20');
             } else {
                 editorPanel.classList.add('hidden');
                 editControls.forEach(control => control.classList.add('hidden'));
-                this.textContent = '✏️ Editor';
+                this.innerHTML = '✏️ Editor';
                 this.classList.remove('bg-green-600/20');
             }
             
@@ -2077,6 +2090,8 @@
         window.toggleAiNewsVisibility = toggleAiNewsVisibility;
         window.openNewsLink = openNewsLink;
 
+
+
         // Inicializar aplicação
         initializeApp();
     </script>
@@ -2215,5 +2230,5 @@
         // Expor função de logout globalmente
         window.logout = logout;
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'986505f0b633f630',t:'MTc1OTA4MTE5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987c622462a72755',t:'MTc1OTMyNjE0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
